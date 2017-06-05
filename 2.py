@@ -1,7 +1,7 @@
-from typing import Generator
+from typing import Iterable
 
 
-def fibonacci(stop: int) -> Generator[int, None, None]:
+def fibonacci(stop: int) -> Iterable[int]:
     a, b = 0, 1
     while b < stop:
         yield b
