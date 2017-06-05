@@ -12,4 +12,4 @@ def is_even(number: int) -> bool:
     return number % 2 == 0
 
 
-print(sum(filter(is_even, fibonacci(4_000_000))))
+assert sum(filter(is_even, fibonacci(4_000_000))) == 4_613_732

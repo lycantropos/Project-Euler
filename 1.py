@@ -3,12 +3,12 @@ from typing import (Iterable,
 
 
 def multiples(*,
-              stop_number: int,
-              start_number: int = 1,
+              start: int = 1,
+              stop: int,
               step: int = 1,
               multipliers: List[int]
               ) -> Iterable[int]:
-    numbers = range(start_number, stop_number, step)
+    numbers = range(start, stop, step)
 
     def is_multiple(number: int) -> bool:
         return any(number % multiplier == 0
@@ -17,5 +17,5 @@ def multiples(*,
     return filter(is_multiple, numbers)
 
 
-print(sum(multiples(stop_number=1000,
-                    multipliers=[3, 5])))
+assert sum(multiples(stop=1_000,
+                     multipliers=[3, 5])) == 233_168
