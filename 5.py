@@ -2,21 +2,7 @@ import operator
 from collections import Counter
 from functools import reduce
 from itertools import starmap
-from math import sqrt
 from typing import Iterable
-
-
-def is_prime(number: int) -> bool:
-    if number == 2:
-        return True
-    if number == 1 or number % 2 == 0:
-        return False
-    stop = int(sqrt(number))
-    odd_factors = range(3, stop, 2)
-    for factor in odd_factors:
-        if number % factor == 0:
-            return False
-    return True
 
 
 def prime_factors(number: int) -> Iterable[int]:
