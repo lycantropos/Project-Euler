@@ -1,8 +1,7 @@
-import operator
-from functools import (partial,
-                       reduce)
-from typing import List
 import re
+from typing import List
+
+from utils import product
 
 
 def max_adjacent_digits_products(*,
@@ -11,8 +10,7 @@ def max_adjacent_digits_products(*,
     adjacent_digits = list(digits[start:start + adjacent_digits_count]
                            for start in range(len(digits)
                                               - adjacent_digits_count + 1))
-    prod = partial(reduce, operator.mul)
-    adjacent_digits_products = map(prod, adjacent_digits)
+    adjacent_digits_products = map(product, adjacent_digits)
     return max(adjacent_digits_products)
 
 
