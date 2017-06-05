@@ -1,8 +1,9 @@
 import operator
+from collections import Counter
 from functools import reduce
 from itertools import starmap
 from math import sqrt
-from typing import Iterable, Counter
+from typing import Iterable
 
 
 def is_prime(number: int) -> bool:
