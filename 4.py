@@ -17,6 +17,7 @@ def numbers_products_palindromes(*,
                                                                  r=2))
     return filter(is_palindrome, numbers_products)
 
-
+assert max(numbers_products_palindromes(start=10,
+                                        stop=100)) == 9009
 assert max(numbers_products_palindromes(start=100,
                                         stop=1000)) == 906_609

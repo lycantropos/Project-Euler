@@ -8,4 +8,5 @@ def largest_prime_factor(number: int) -> int:
     return number
 
 
+assert largest_prime_factor(13_195) == 29
 assert largest_prime_factor(600_851_475_143) == 6857
