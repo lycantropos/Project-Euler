@@ -22,3 +22,7 @@ def max_factor(number: int) -> int:
 
 def even(number: int) -> bool:
     return number % 2 == 0
+
+
+def sum_of_digits(number: int) -> int:
+    return sum(map(int, str(number)))
