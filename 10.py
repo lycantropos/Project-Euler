@@ -5,13 +5,14 @@ from typing import List
 def primes(number: int) -> List[int]:
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
-    correction = number % 6 > 1
+    number_mod_six = number % 6
+    correction = number_mod_six > 1
     number = {0: number,
               1: number - 1,
               2: number + 4,
               3: number + 3,
               4: number + 2,
-              5: number + 1}[number % 6]
+              5: number + 1}[number_mod_six]
     number_third_part = number // 3
     sieve = [True] * number_third_part
     sieve[0] = False
