@@ -1,17 +1,7 @@
-from itertools import (count,
-                       chain)
-from typing import (Iterable,
-                    Set)
+from itertools import count
+from typing import Iterable
 
-from utils import max_factor
-
-concatenate_iterables = chain.from_iterable
-
-
-def factors(number: int) -> Set[int]:
-    return set(concatenate_iterables((factor, number // factor)
-                                     for factor in range(1, max_factor(number) + 1)
-                                     if number % factor == 0))
+from utils import factors
 
 
 def triangle_numbers() -> Iterable[int]:
@@ -19,10 +9,16 @@ def triangle_numbers() -> Iterable[int]:
         yield index * (index + 1) // 2
 
 
-def highly_divisible_triangular_number(factors_count: int) -> int:
+def factors_count(number: int) -> int:
+    return len(factors(number, start=1))
+
+
+def highly_divisible_triangular_number(*,
+                                       target_factors_count: int
+                                       ) -> int:
     return next(number
                 for number in triangle_numbers()
-                if len(factors(number)) >= factors_count)
+                if factors_count(number) >= target_factors_count)
 
 
-assert highly_divisible_triangular_number(factors_count=500) == 76_576_500
+assert highly_divisible_triangular_number(target_factors_count=500) == 76_576_500

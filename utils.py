@@ -1,12 +1,16 @@
 import operator
 from functools import (partial,
                        reduce)
+from itertools import chain
 from math import sqrt
 from typing import (Any,
                     Iterable,
-                    Sequence)
+                    Sequence,
+                    Set)
 
 multiply = partial(reduce, operator.mul)
+
+concatenate_iterables = chain.from_iterable
 
 
 def chunks(elements: Sequence[Any],
@@ -26,3 +30,14 @@ def even(number: int) -> bool:
 
 def sum_of_digits(number: int) -> int:
     return sum(map(int, str(number)))
+
+
+def factors(number: int,
+            *,
+            start: int) -> Set[int]:
+    return set(
+        chain([1],
+              concatenate_iterables(
+                  (factor, number // factor)
+                  for factor in range(start, max_factor(number) + 1)
+                  if number % factor == 0)))
