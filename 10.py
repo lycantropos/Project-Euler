@@ -29,9 +29,7 @@ def primes(number: int) -> List[int]:
             [False]
             * ((number_sixth_part_pred - k_squared // 6) // k + 1))
 
-        k_quadruple = 4 * k
-        i_bitwised = (factor & 1)
-        k_diff = k_squared + k_quadruple - k_doubled * i_bitwised
+        k_diff = k_squared + 4 * k - k_doubled * (factor & 1)
         sieve[k_diff // 3::k_doubled] = (
             [False]
             * ((number_sixth_part_pred - k_diff // 6) // k + 1))
