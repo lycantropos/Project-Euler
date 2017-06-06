@@ -1,7 +1,7 @@
 import re
 from typing import List
 
-from utils import product
+from utils import multiply
 
 
 def max_adjacent_digits_products(*,
@@ -10,7 +10,7 @@ def max_adjacent_digits_products(*,
     adjacent_digits = list(digits[start:start + adjacent_digits_count]
                            for start in range(len(digits)
                                               - adjacent_digits_count + 1))
-    adjacent_digits_products = map(product, adjacent_digits)
+    adjacent_digits_products = map(multiply, adjacent_digits)
     return max(adjacent_digits_products)
 
 
@@ -19,7 +19,7 @@ def largest_series_product(*,
                            adjacent_digits_count: int) -> int:
     non_zero_digits_series = list(
         list(map(int, non_zero_digits_str))
-        # digits sequences with zero cannot give maximum product
+        # digits sequences with zero cannot give maximum multiply
         for non_zero_digits_str in re.split('0+', number_str)
         # skipping too short digits sequences
         if len(non_zero_digits_str) >= adjacent_digits_count)

@@ -2,7 +2,7 @@ from itertools import permutations
 from math import sqrt
 from typing import Tuple
 
-from utils import product
+from utils import multiply
 
 MAX_NUMBER = 1000
 
@@ -40,4 +40,4 @@ special_pythagorean_triplet, = filter(is_pythagorean_triple,
                                              set(pythagorean_triples_candidates(
                                                  stop=MAX_NUMBER))))
 
-assert product(special_pythagorean_triplet) == 31_875_000
+assert multiply(special_pythagorean_triplet) == 31_875_000
