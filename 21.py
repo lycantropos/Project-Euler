@@ -1,11 +1,11 @@
 from typing import Iterable
 
-from utils import factors
+from utils import proper_divisors
 
 
 def is_amicable_number(number: int):
-    candidate = sum(factors(number, start=2))
-    return (sum(factors(candidate, start=2)) == number and
+    candidate = sum(proper_divisors(number))
+    return (sum(proper_divisors(candidate)) == number and
             candidate != number)
 
 

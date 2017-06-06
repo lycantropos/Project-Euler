@@ -34,10 +34,14 @@ def sum_of_digits(number: int) -> int:
 
 def factors(number: int,
             *,
-            start: int) -> Set[int]:
+            start: int = 1) -> Set[int]:
     return set(
         chain([1],
               concatenate_iterables(
                   (factor, number // factor)
                   for factor in range(start, max_factor(number) + 1)
                   if number % factor == 0)))
+
+
+proper_divisors = partial(factors,
+                          start=2)

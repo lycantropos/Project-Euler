@@ -10,7 +10,7 @@ def triangle_numbers() -> Iterable[int]:
 
 
 def factors_count(number: int) -> int:
-    return len(factors(number, start=1))
+    return len(factors(number))
 
 
 def highly_divisible_triangular_number(*,
