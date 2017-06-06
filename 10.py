@@ -1,10 +1,15 @@
-from math import sqrt
 from typing import List
+
+from utils import max_factor
 
 
 def primes(number: int) -> List[int]:
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
+    yield 2
+    yield 3
+    if number < 5:
+        return
     number_mod_six = number % 6
     correction = number_mod_six > 1
     number = {0: number,
@@ -16,7 +21,7 @@ def primes(number: int) -> List[int]:
     number_third_part = number // 3
     sieve = [True] * number_third_part
     sieve[0] = False
-    factor_stop = int(sqrt(number)) // 3 + 1
+    factor_stop = max_factor(number) // 3 + 1
     for factor in range(factor_stop):
         if not sieve[factor]:
             continue
@@ -34,8 +39,6 @@ def primes(number: int) -> List[int]:
             [False]
             * ((number_sixth_part_pred - k_diff // 6) // k + 1))
 
-    yield 2
-    yield 3
     yield from (3 * i + 1 | 1
                 for i in range(1, number_third_part - correction)
                 if sieve[i])

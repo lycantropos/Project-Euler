@@ -1,8 +1,8 @@
 from itertools import permutations
-from math import sqrt
 from typing import Tuple
 
-from utils import multiply
+from utils import (multiply,
+                   max_factor)
 
 MAX_NUMBER = 1000
 
@@ -16,8 +16,7 @@ def pythagorean_triples_candidates(*,
     # https://en.wikipedia.org/wiki/Pythagorean_triple#Generating_a_triple
     max_k = stop // (MIN_N ** 2 + MIN_M ** 2)
     for k in range(1, max_k + 1):
-        max_m = int(sqrt(stop // k))
-        numbers = range(1, max_m)
+        numbers = range(1, max_factor(stop // k))
         for n, m in map(sorted, permutations(numbers, r=2)):
             candidate = sorted([m ** 2 - n ** 2,
                                 2 * m * n,
