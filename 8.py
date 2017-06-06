@@ -17,12 +17,12 @@ def max_adjacent_digits_products(*,
 def largest_series_product(*,
                            number_str: str,
                            adjacent_digits_count: int) -> int:
-    non_zero_digits_series = list(
+    non_zero_digits_series = [
         list(map(int, non_zero_digits_str))
         # digits sequences with zero cannot give maximum multiply
         for non_zero_digits_str in re.split('0+', number_str)
         # skipping too short digits sequences
-        if len(non_zero_digits_str) >= adjacent_digits_count)
+        if len(non_zero_digits_str) >= adjacent_digits_count]
     max_adjacent_digits_series_products = (
         max_adjacent_digits_products(digits=non_zero_digits,
                                      adjacent_digits_count=adjacent_digits_count)
