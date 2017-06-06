@@ -1,5 +1,7 @@
 from typing import Iterable
 
+from utils import even
+
 
 def fibonacci(stop: int) -> Iterable[int]:
     a, b = 0, 1
@@ -8,8 +10,4 @@ def fibonacci(stop: int) -> Iterable[int]:
         a, b = b, a + b
 
 
-def is_even(number: int) -> bool:
-    return number % 2 == 0
-
-
-assert sum(filter(is_even, fibonacci(4_000_000))) == 4_613_732
+assert sum(filter(even, fibonacci(4_000_000))) == 4_613_732

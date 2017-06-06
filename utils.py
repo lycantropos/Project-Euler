@@ -18,3 +18,7 @@ def chunks(elements: Sequence[Any],
 
 def max_factor(number: int) -> int:
     return int(sqrt(number))
+
+
+def even(number: int) -> bool:
+    return number % 2 == 0
