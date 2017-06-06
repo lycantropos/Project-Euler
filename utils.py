@@ -1,7 +1,9 @@
 import operator
 from functools import (partial,
                        reduce)
-from typing import Sequence, Any, Iterable
+from typing import (Any,
+                    Iterable,
+                    Sequence)
 
 multiply = partial(reduce, operator.mul)
 
