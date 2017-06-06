@@ -4,7 +4,7 @@ from typing import Iterable
 
 def parse_names(lines: Iterable[str]) -> Iterable[str]:
     for line in lines:
-        yield from (word.strip('"')
+        yield from (word.strip('"').upper()
                     for word in line.split(','))
 
 
