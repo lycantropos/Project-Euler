@@ -3,6 +3,7 @@ from functools import (partial,
                        reduce)
 from itertools import chain
 from math import sqrt
+from numbers import Real
 from typing import (Any,
                     Iterable,
                     Sequence,
@@ -45,3 +46,10 @@ def factors(number: int,
 
 proper_divisors = partial(factors,
                           start=2)
+
+
+def fibonacci(stop: Real = float('inf')) -> Iterable[int]:
+    a, b = 0, 1
+    while b < stop:
+        yield b
+        a, b = b, a + b
