@@ -25,7 +25,7 @@ def max_factor(number: int) -> int:
 
 
 def even(number: int) -> bool:
-    return number % 2 == 0
+    return not number & 1
 
 
 def sum_of_digits(number: int) -> int:
