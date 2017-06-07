@@ -29,8 +29,8 @@ NUMBERS_NAMES = {10: 'ten',
                  80: 'eighty',
                  90: 'ninety',
                  1_000: 'one thousand'}
-NUMBERS_NAMES.update({number * 100: DIGITS_NAMES[number] + ' hundred'
-                      for number in range(1, 10)})
+NUMBERS_NAMES.update({digit * 100: DIGITS_NAMES[digit] + ' hundred'
+                      for digit in range(1, 10)})
 
 
 def number_to_words(number: int) -> Iterable[str]:
@@ -87,4 +87,4 @@ assert letters_count(number_to_words(342)) == 23
 assert letters_count(number_to_words(115)) == 20
 
 assert numbers_letters_count(stop=6) == 19
-assert numbers_letters_count(stop=1001) == 21_124
+assert numbers_letters_count(stop=1_001) == 21_124
