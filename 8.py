@@ -28,7 +28,7 @@ def largest_series_product(*,
                                      adjacent_digits_count=adjacent_digits_count)
         for non_zero_digits in non_zero_digits_series)
     return max(max_adjacent_digits_series_products,
-               # for zeros number strings
+               # for number strings filled with zeros
                default=0)
 
 
