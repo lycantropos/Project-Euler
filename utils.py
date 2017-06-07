@@ -24,8 +24,8 @@ def max_factor(number: int) -> int:
     return int(sqrt(number))
 
 
-def even(number: int) -> bool:
-    return not number & 1
+def odd(number: int) -> int:
+    return number & 1
 
 
 def sum_of_digits(number: int) -> int:

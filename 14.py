@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from utils import even
+from utils import odd
 
 memoized_collatz_sequences_lengths = {}
 
@@ -9,7 +9,7 @@ def collatz_sequence_length(start: int) -> Iterable[int]:
     term = start
     length = 1
     while term != 1:
-        if even(term):
+        if not odd(term):
             term //= 2
         else:
             term = 3 * term + 1

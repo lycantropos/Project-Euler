@@ -1,6 +1,7 @@
+from itertools import filterfalse
 from typing import Iterable
 
-from utils import even
+from utils import odd
 
 
 def fibonacci(stop: int) -> Iterable[int]:
@@ -10,4 +11,4 @@ def fibonacci(stop: int) -> Iterable[int]:
         a, b = b, a + b
 
 
-assert sum(filter(even, fibonacci(4_000_000))) == 4_613_732
+assert sum(filterfalse(odd, fibonacci(4_000_000))) == 4_613_732
