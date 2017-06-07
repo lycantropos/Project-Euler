@@ -13,17 +13,22 @@ def collatz_sequence_length(start: int) -> Iterable[int]:
             term //= 2
         else:
             term = 3 * term + 1
-        if term in memoized_collatz_sequences_lengths:
+        try:
             length += memoized_collatz_sequences_lengths[term]
             break
-        length += 1
+        except KeyError:
+            length += 1
     memoized_collatz_sequences_lengths[start] = length
     return length
 
 
-def longest_collatz_sequence(stop: int) -> int:
-    return max(range(1, stop),
+def longest_collatz_sequence(*,
+                             start: int = 1,
+                             stop: int,
+                             step: int = 1) -> int:
+    return max(range(start, stop, step),
                key=collatz_sequence_length)
 
 
-assert longest_collatz_sequence(1_000_000) == 837_799
+assert collatz_sequence_length(13) == 10
+assert longest_collatz_sequence(stop=1_000_000) == 837_799
