@@ -1,19 +1,7 @@
 from itertools import (count,
                        islice)
 
-from utils import max_factor
-
-
-def is_prime(number: int) -> bool:
-    if number == 2:
-        return True
-    if number == 1 or number % 2 == 0:
-        return False
-    odd_factors = range(3, max_factor(number) + 1, 2)
-    for factor in odd_factors:
-        if number % factor == 0:
-            return False
-    return True
+from utils import is_prime
 
 
 def prime_number_by_index(index: int) -> int:
