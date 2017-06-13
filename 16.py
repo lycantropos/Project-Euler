@@ -1,4 +1,4 @@
-from utils import sum_of_digits
+from utils import digits_sum
 
-assert sum_of_digits(2 ** 15) == 26
-assert sum_of_digits(2 ** 1_000) == 1_366
+assert digits_sum(2 ** 15) == 26
+assert digits_sum(2 ** 1_000) == 1_366
