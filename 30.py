@@ -21,10 +21,8 @@ def digit_powers(*,
                  exponent: int,
                  step: int = 1) -> Iterable[int]:
     def is_digits_powers_sum(number: int) -> bool:
-        return sum(map(power, digits(number))) == number
-
-    def power(number: int) -> int:
-        return number ** exponent
+        return sum(digit ** exponent
+                   for digit in digits(number)) == number
 
     digits_count = max_digits_powers_sum_digits_count(exponent)
     stop = 10 ** digits_count
