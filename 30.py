@@ -1,5 +1,6 @@
 from functools import partial
-from itertools import count, filterfalse
+from itertools import (count,
+                       filterfalse)
 from typing import Iterable
 
 from utils import digits
