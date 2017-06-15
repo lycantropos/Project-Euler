@@ -5,7 +5,7 @@ from typing import Iterable
 from utils import digits_to_number
 
 
-def pandigital_products(digits: Iterable[int]):
+def pandigital_products(digits: Iterable[int]) -> Iterable[int]:
     digits = set(digits)
     digits_count = len(digits)
     multipliers_digits_counts_sum = ceil(digits_count / 2)

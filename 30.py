@@ -8,7 +8,7 @@ from utils import number_to_digits
 
 def exists_digits_powers_sum_number(digits_count: int,
                                     *,
-                                    exponent: int):
+                                    exponent: int) -> bool:
     return 9 ** (exponent + 1) * digits_count >= 10 ** digits_count - 1
 
 

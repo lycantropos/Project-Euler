@@ -3,7 +3,7 @@ from typing import Iterable
 from utils import proper_divisors
 
 
-def is_amicable_number(number: int):
+def is_amicable_number(number: int) -> bool:
     candidate = sum(proper_divisors(number))
     return (sum(proper_divisors(candidate)) == number and
             candidate != number)
