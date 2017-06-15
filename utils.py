@@ -26,12 +26,20 @@ def max_factor(number: int) -> int:
     return int(sqrt(number))
 
 
+def max_number(digits_count: int) -> int:
+    return 10 ** digits_count - 1
+
+
 def odd(number: int) -> int:
     return number & 1
 
 
-def digits_sum(number: int) -> int:
+def number_digits_sum(number: int) -> int:
     return sum(number_to_digits(number))
+
+
+def number_digits_count(number: int) -> int:
+    return len(str(number))
 
 
 def number_to_digits(number: int) -> Iterable[int]:

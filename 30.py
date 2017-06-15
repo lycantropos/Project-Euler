@@ -3,13 +3,14 @@ from itertools import (count,
                        filterfalse)
 from typing import Iterable
 
-from utils import number_to_digits
+from utils import (max_number,
+                   number_to_digits)
 
 
 def exists_digits_powers_sum_number(digits_count: int,
                                     *,
                                     exponent: int) -> bool:
-    return 9 ** (exponent + 1) * digits_count >= 10 ** digits_count - 1
+    return 9 ** (exponent + 1) * digits_count >= max_number(digits_count)
 
 
 def max_digits_powers_sum_digits_count(exponent: int) -> int:

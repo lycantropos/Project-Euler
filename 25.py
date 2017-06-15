@@ -1,9 +1,10 @@
-from utils import fibonacci
+from utils import (fibonacci,
+                   number_digits_count)
 
 
 def n_digits_fibonacci_number_index(digits_count: int) -> int:
     def has_n_digits(number: int) -> bool:
-        return len(str(number)) >= digits_count
+        return number_digits_count(number) >= digits_count
 
     return next(index
                 for index, number in enumerate(fibonacci(), start=1)

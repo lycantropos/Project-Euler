@@ -3,14 +3,15 @@ from itertools import (count,
 from math import factorial
 from typing import Iterable
 
-from utils import number_to_digits
+from utils import (max_number,
+                   number_to_digits)
 
 digits_factorials = {digit: factorial(digit)
                      for digit in range(10)}
 
 
 def exists_digits_factorials_sum_number(digits_count: int) -> bool:
-    return digits_factorials[9] * digits_count * 9 >= 10 ** digits_count - 1
+    return digits_factorials[9] * digits_count * 9 >= max_number(digits_count)
 
 
 def max_digits_factorials_sum_digits_count() -> int:

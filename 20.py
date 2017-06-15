@@ -1,6 +1,6 @@
 from math import factorial
 
-from utils import digits_sum
+from utils import number_digits_sum
 
-assert digits_sum(factorial(10)) == 27
-assert digits_sum(factorial(100)) == 648
+assert number_digits_sum(factorial(10)) == 27
+assert number_digits_sum(factorial(100)) == 648
