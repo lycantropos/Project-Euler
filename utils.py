@@ -35,10 +35,6 @@ def max_number(digits_count: int) -> int:
     return 10 ** digits_count - 1
 
 
-def odd(number: int) -> int:
-    return number & 1
-
-
 def number_digits_sum(number: int) -> int:
     return sum(number_to_digits(number))
 
@@ -118,6 +114,10 @@ def primes(number: int) -> List[int]:
                 if sieve[i])
 
 
+def odd(number: int) -> int:
+    return number & 1
+
+
 def is_prime(number: int) -> bool:
     if number == 2:
         return True
@@ -128,3 +128,7 @@ def is_prime(number: int) -> bool:
         if number % factor == 0:
             return False
     return True
+
+
+def is_palindrome(string: str) -> bool:
+    return string == string[::-1]

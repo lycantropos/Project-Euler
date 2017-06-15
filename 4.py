@@ -1,10 +1,7 @@
 from itertools import combinations
 from typing import Iterable
 
-
-def is_palindrome(number: int) -> bool:
-    number_str = str(number)
-    return number_str == number_str[::-1]
+from utils import is_palindrome
 
 
 def numbers_products_palindromes(*,
@@ -15,7 +12,8 @@ def numbers_products_palindromes(*,
     numbers_products = (number * other_number
                         for number, other_number in combinations(numbers,
                                                                  r=2))
-    return filter(is_palindrome, numbers_products)
+    yield from map(int, filter(is_palindrome, map(str, numbers_products)))
+
 
 assert max(numbers_products_palindromes(start=10,
                                         stop=100)) == 9009
