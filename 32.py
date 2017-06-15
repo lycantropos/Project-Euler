@@ -2,6 +2,8 @@ from itertools import permutations
 from math import ceil
 from typing import Iterable
 
+from utils import digits_to_number
+
 
 def pandigital_products(digits: Iterable[int]):
     digits = set(digits)
@@ -29,10 +31,6 @@ def pandigital_products(digits: Iterable[int]):
                     product = digits_to_number(product_digits)
                     if left_multiplier * right_multiplier == product:
                         yield product
-
-
-def digits_to_number(digits: Iterable[int]) -> int:
-    return int(''.join(map(str, digits)))
 
 
 assert sum(set(pandigital_products(range(1, 10)))) == 45_228

@@ -3,7 +3,7 @@ from itertools import (count,
                        filterfalse)
 from typing import Iterable
 
-from utils import digits
+from utils import number_to_digits
 
 
 def exists_digits_powers_sum_number(digits_count: int,
@@ -23,7 +23,7 @@ def digit_powers(*,
                  step: int = 1) -> Iterable[int]:
     def is_digits_powers_sum(number: int) -> bool:
         return sum(digit ** exponent
-                   for digit in digits(number)) == number
+                   for digit in number_to_digits(number)) == number
 
     digits_count = max_digits_powers_sum_digits_count(exponent)
     stop = 10 ** digits_count

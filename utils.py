@@ -31,11 +31,15 @@ def odd(number: int) -> int:
 
 
 def digits_sum(number: int) -> int:
-    return sum(digits(number))
+    return sum(number_to_digits(number))
 
 
-def digits(number: int) -> Iterable[int]:
+def number_to_digits(number: int) -> Iterable[int]:
     yield from map(int, str(number))
+
+
+def digits_to_number(digits: Iterable[int]) -> int:
+    return int(''.join(map(str, digits)))
 
 
 def factors(number: int,
