@@ -22,6 +22,11 @@ def chunks(elements: Sequence[Any],
         yield elements[offset:offset + size]
 
 
+def rotate(sequence: Sequence[Any],
+           position: int) -> Sequence[Any]:
+    return sequence[position:] + sequence[:position]
+
+
 def max_factor(number: int) -> int:
     return int(sqrt(number))
 
