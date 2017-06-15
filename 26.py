@@ -2,8 +2,7 @@ from decimal import (Decimal,
                      getcontext)
 from itertools import filterfalse
 
-PRECISION = 1_000
-getcontext().prec = PRECISION
+getcontext().prec = 1_000
 
 EMPTY_CYCLE = ''
 
