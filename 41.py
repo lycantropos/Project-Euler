@@ -22,4 +22,5 @@ pandigital_primes = filter(is_pandigital,
                            # => it will be always divided by 3 and 9
                            primes(digits_to_number(range(8, 0, -1)),
                                   reverse=True))
+
 assert next(pandigital_primes) == 7_652_413
