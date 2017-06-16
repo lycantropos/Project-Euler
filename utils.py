@@ -192,8 +192,17 @@ def triangular(number: int) -> bool:
     return is_perfect_square(discriminant)
 
 
+def pentagonial(number: int) -> bool:
+    discriminant = 1 + 24 * number
+    return (is_perfect_square(discriminant) and
+            (1 + int_sqrt(discriminant)) % 6 == 0)
+
+
 def is_perfect_square(number: int) -> bool:
-    integer_square_root = int_sqrt(number)
+    try:
+        integer_square_root = int_sqrt(number)
+    except ValueError:
+        return False
     return integer_square_root * integer_square_root == number
 
 
