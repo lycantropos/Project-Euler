@@ -15,4 +15,8 @@ def triangular_pentagonal_hexagonal_numbers(start: int) -> Iterator[int]:
     yield from filter(pentagonial, triangular_hexagonal_numbers)
 
 
-assert next(triangular_pentagonal_hexagonal_numbers(144)) == 1_533_776_805
+numbers_generator = triangular_pentagonal_hexagonal_numbers(1)
+
+assert next(numbers_generator) == 1
+assert next(numbers_generator) == 40_755
+assert next(numbers_generator) == 1_533_776_805
