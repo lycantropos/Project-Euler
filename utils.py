@@ -189,9 +189,13 @@ def pythagorean_triplets_candidates(stop: int
 
 def triangular(number: int) -> bool:
     discriminant = 1 + 8 * number
-    return is_squared_integer(discriminant)
+    return is_perfect_square(discriminant)
 
 
-def is_squared_integer(number: int) -> bool:
-    integer_square_root = int(sqrt(number))
+def is_perfect_square(number: int) -> bool:
+    integer_square_root = int_sqrt(number)
     return integer_square_root * integer_square_root == number
+
+
+def int_sqrt(number: int) -> int:
+    return int(sqrt(number))
