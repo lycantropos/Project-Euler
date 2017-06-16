@@ -1,14 +1,16 @@
 import operator
 from functools import (partial,
                        reduce)
-from itertools import chain, permutations
+from itertools import (chain,
+                       permutations)
 from math import sqrt
 from numbers import Real
 from typing import (Any,
                     Iterable,
                     Sequence,
                     Set,
-                    List, Tuple)
+                    Tuple,
+                    List)
 
 multiply = partial(reduce, operator.mul)
 
