@@ -1,14 +1,14 @@
 import operator
 from functools import (partial,
                        reduce)
-from itertools import chain
+from itertools import chain, permutations
 from math import sqrt
 from numbers import Real
 from typing import (Any,
                     Iterable,
                     Sequence,
                     Set,
-                    List)
+                    List, Tuple)
 
 multiply = partial(reduce, operator.mul)
 
@@ -73,25 +73,26 @@ def fibonacci(stop: Real = float('inf')) -> Iterable[int]:
         a, b = b, a + b
 
 
-def primes(number: int) -> List[int]:
+def primes(stop: int) -> List[int]:
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
+    # TODO: refactor this mess
     yield 2
     yield 3
-    if number < 5:
+    if stop < 5:
         return
-    number_mod_six = number % 6
-    correction = number_mod_six > 1
-    number = {0: number,
-              1: number - 1,
-              2: number + 4,
-              3: number + 3,
-              4: number + 2,
-              5: number + 1}[number_mod_six]
-    number_third_part = number // 3
+    stop_mod_six = stop % 6
+    correction = stop_mod_six > 1
+    stop = {0: stop,
+            1: stop - 1,
+            2: stop + 4,
+            3: stop + 3,
+            4: stop + 2,
+            5: stop + 1}[stop_mod_six]
+    number_third_part = stop // 3
     sieve = [True] * number_third_part
     sieve[0] = False
-    factor_stop = max_factor(number) // 3 + 1
+    factor_stop = max_factor(stop) // 3 + 1
     for factor in range(factor_stop):
         if not sieve[factor]:
             continue
@@ -99,7 +100,7 @@ def primes(number: int) -> List[int]:
         k = 3 * factor + 1 | 1
         k_squared = k * k
         k_doubled = 2 * k
-        number_sixth_part_pred = number // 6 - 1
+        number_sixth_part_pred = stop // 6 - 1
         sieve[(k_squared // 3)::k_doubled] = (
             [False]
             * ((number_sixth_part_pred - k_squared // 6) // k + 1))
@@ -132,3 +133,30 @@ def is_prime(number: int) -> bool:
 
 def is_palindrome(string: str) -> bool:
     return string == string[::-1]
+
+
+def pythagorean_triplets(stop: int) -> Iterable[int]:
+    yield from set(filter(is_pythagorean_triplet,
+                          pythagorean_triplets_candidates(stop)))
+
+
+def is_pythagorean_triplet(triplet: Tuple[int, int, int]) -> bool:
+    a, b, c = triplet
+    return a ** 2 + b ** 2 == c ** 2
+
+
+def pythagorean_triplets_candidates(stop: int
+                                    ) -> Iterable[Tuple[int, int, int]]:
+    # based on
+    # https://en.wikipedia.org/wiki/Pythagorean_triple#Generating_a_triple
+    min_n = 1
+    min_m = 2
+    max_k = stop // (min_n ** 2 + min_m ** 2)
+    for k in range(1, max_k + 1):
+        numbers = range(1, max_factor(stop // k))
+        for n, m in map(sorted, permutations(numbers, r=2)):
+            candidate = sorted([m ** 2 - n ** 2,
+                                2 * m * n,
+                                m ** 2 + n ** 2])
+            yield tuple(k * coordinate
+                        for coordinate in candidate)
