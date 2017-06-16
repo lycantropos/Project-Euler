@@ -29,6 +29,15 @@ def rotate(sequence: Sequence[Any],
     return sequence[position:] + sequence[:position]
 
 
+def parse_lines(lines: Iterable[str],
+                *,
+                sep: str = ',',
+                strip_chars: str = '"') -> Iterable[str]:
+    for line in lines:
+        yield from (word.strip(strip_chars)
+                    for word in line.split(sep))
+
+
 def max_factor(number: int) -> int:
     return int(sqrt(number))
 
@@ -176,3 +185,13 @@ def pythagorean_triplets_candidates(stop: int
                                 m ** 2 + n ** 2])
             yield tuple(k * coordinate
                         for coordinate in candidate)
+
+
+def triangular(number: int) -> bool:
+    discriminant = 1 + 8 * number
+    return is_squared_integer(discriminant)
+
+
+def is_squared_integer(number: int) -> bool:
+    integer_square_root = int(sqrt(number))
+    return integer_square_root * integer_square_root == number

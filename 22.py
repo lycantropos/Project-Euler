@@ -1,11 +1,7 @@
 from string import ascii_uppercase
 from typing import Iterable
 
-
-def parse_names(lines: Iterable[str]) -> Iterable[str]:
-    for line in lines:
-        yield from (word.strip('"').upper()
-                    for word in line.split(','))
+from utils import parse_lines
 
 
 def alphabetical_value(word: str) -> int:
@@ -20,7 +16,7 @@ def total_names_score(names: Iterable[str]) -> int:
 
 
 with open('names.txt') as names_file:
-    names = list(parse_names(names_file))
+    names = list(parse_lines(names_file))
 
 assert alphabetical_value('COLIN') == 53
 assert total_names_score(names) == 871_198_282
