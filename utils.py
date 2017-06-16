@@ -75,14 +75,22 @@ def fibonacci(stop: Real = float('inf')) -> Iterable[int]:
         a, b = b, a + b
 
 
-def primes(stop: int) -> List[int]:
+def primes(stop: int,
+           *,
+           reverse: bool = False) -> List[int]:
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
     # TODO: refactor this mess
-    yield 2
-    yield 3
+    if not reverse:
+        yield 2
+        yield 3
+
     if stop < 5:
+        if reverse:
+            yield 3
+            yield 2
         return
+
     stop_mod_six = stop % 6
     correction = stop_mod_six > 1
     stop = {0: stop,
@@ -111,10 +119,16 @@ def primes(stop: int) -> List[int]:
         sieve[k_diff // 3::k_doubled] = (
             [False]
             * ((number_sixth_part_pred - k_diff // 6) // k + 1))
-
-    yield from (3 * i + 1 | 1
-                for i in range(1, number_third_part - correction)
-                if sieve[i])
+    if reverse:
+        indices = range(number_third_part - correction - 1, 0, -1)
+    else:
+        indices = range(1, number_third_part - correction)
+    yield from (3 * index + 1 | 1
+                for index in indices
+                if sieve[index])
+    if reverse:
+        yield 3
+        yield 2
 
 
 def odd(number: int) -> int:
