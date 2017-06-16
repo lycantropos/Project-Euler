@@ -7,7 +7,7 @@ from utils import (digits_to_number,
 possible_digits = {2} | set(range(1, 10, 2))
 
 
-def truncatable_primes(*digits: Tuple[int]) -> Iterable[int]:
+def truncatable_primes(digits: Tuple[int] = ()) -> Iterable[int]:
     candidate_digits_count = len(digits) + 1
     for digit in possible_digits:
         candidate_digits = (digit,) + digits
@@ -20,7 +20,7 @@ def truncatable_primes(*digits: Tuple[int]) -> Iterable[int]:
                     for position in range(1, candidate_digits_count))):
             yield candidate_number
 
-        yield from truncatable_primes(*candidate_digits)
+        yield from truncatable_primes(candidate_digits)
 
 
 assert sum(truncatable_primes()) == 748_317
