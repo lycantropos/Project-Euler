@@ -1,4 +1,6 @@
-from utils import (primes,
+from typing import Iterable
+
+from utils import (prime_numbers,
                    number_digits_count,
                    max_number,
                    digits_to_number,
@@ -6,12 +8,12 @@ from utils import (primes,
                    rotate)
 
 
-def circular_primes(number: int):
+def circular_primes(number: int) -> Iterable[int]:
     primes_stop = max_number(number_digits_count(number))
-    primes_set = set(primes(primes_stop))
+    primes_set = set(prime_numbers(primes_stop))
 
-    def is_circular(prime) -> bool:
-        digits = tuple(number_to_digits(prime))
+    def is_circular(prime_number: int) -> bool:
+        digits = tuple(number_to_digits(prime_number))
         rotated_digits = (rotate(digits, position)
                           for position in range(len(digits)))
         for rotated_prime in map(digits_to_number, rotated_digits):
@@ -19,7 +21,7 @@ def circular_primes(number: int):
                 return False
         return True
 
-    yield from filter(is_circular, primes(number))
+    yield from filter(is_circular, prime_numbers(number))
 
 
 assert list(circular_primes(100)) == [2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, 97]

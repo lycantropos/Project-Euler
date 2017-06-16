@@ -2,8 +2,8 @@ from itertools import (product,
                        count)
 from typing import Tuple
 
-from utils import (primes,
-                   is_prime,
+from utils import (prime_numbers,
+                   prime,
                    multiply)
 
 
@@ -16,13 +16,13 @@ def consecutive_quadratic_primes_count(coefficients: Tuple[int, int]
 
     for number in count(0):
         value = quadratic_formula(number)
-        if value < 0 or not is_prime(value):
+        if value < 0 or not prime(value):
             return number
 
 
 def max_consecutive_primes_count_coefficients(stop: int) -> Tuple[int, int]:
     formulas_coefficients = product(range(-stop, stop),
-                                    primes(stop + 1))
+                                    prime_numbers(stop + 1))
     return max(formulas_coefficients,
                key=consecutive_quadratic_primes_count)
 

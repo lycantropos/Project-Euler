@@ -1,8 +1,8 @@
-from utils import primes
+from utils import prime_numbers
 
 
 def sum_of_primes(stop: int) -> int:
-    return sum(primes(stop))
+    return sum(prime_numbers(stop))
 
 
 assert sum_of_primes(10) == 17

@@ -12,6 +12,9 @@ from typing import (Any,
                     Tuple,
                     List)
 
+memoized_primes = {1: False,
+                   2: True}
+
 multiply = partial(reduce, operator.mul)
 
 concatenate_iterables = chain.from_iterable
@@ -84,9 +87,9 @@ def fibonacci(stop: Real = float('inf')) -> Iterable[int]:
         a, b = b, a + b
 
 
-def primes(stop: int,
-           *,
-           reverse: bool = False) -> List[int]:
+def prime_numbers(stop: int,
+                  *,
+                  reverse: bool = False) -> List[int]:
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
     # TODO: refactor this mess
@@ -108,8 +111,22 @@ def primes(stop: int,
             3: stop + 3,
             4: stop + 2,
             5: stop + 1}[stop_mod_six]
-    number_third_part = stop // 3
-    sieve = [True] * number_third_part
+    sieve = primes_sieve(stop)
+
+    indices = range(1, stop // 3 - correction)
+    if reverse:
+        indices = reversed(indices)
+    yield from (3 * index + 1 | 1
+                for index in indices
+                if sieve[index])
+
+    if reverse:
+        yield 3
+        yield 2
+
+
+def primes_sieve(stop: int) -> List[bool]:
+    sieve = [True] * (stop // 3)
     sieve[0] = False
     factor_stop = max_factor(stop) // 3 + 1
     for factor in range(factor_stop):
@@ -117,7 +134,7 @@ def primes(stop: int,
             continue
 
         k = 3 * factor + 1 | 1
-        k_squared = k * k
+        k_squared = k ** 2
         k_doubled = 2 * k
         number_sixth_part_pred = stop // 6 - 1
         sieve[(k_squared // 3)::k_doubled] = (
@@ -128,32 +145,28 @@ def primes(stop: int,
         sieve[k_diff // 3::k_doubled] = (
             [False]
             * ((number_sixth_part_pred - k_diff // 6) // k + 1))
-    if reverse:
-        indices = range(number_third_part - correction - 1, 0, -1)
-    else:
-        indices = range(1, number_third_part - correction)
-    yield from (3 * index + 1 | 1
-                for index in indices
-                if sieve[index])
-    if reverse:
-        yield 3
-        yield 2
+    return sieve
 
 
 def odd(number: int) -> int:
     return number & 1
 
 
-def is_prime(number: int) -> bool:
-    if number == 2:
-        return True
-    if number == 1 or number % 2 == 0:
-        return False
-    odd_factors = range(3, max_factor(number) + 1, 2)
-    for factor in odd_factors:
-        if number % factor == 0:
+def prime(number: int) -> bool:
+    try:
+        return memoized_primes[number]
+    except KeyError:
+        if not odd(number):
             return False
-    return True
+        odd_factors = range(3, max_factor(number) + 1, 2)
+        for factor in odd_factors:
+            if number % factor == 0:
+                result = False
+                break
+        else:
+            result = True
+        memoized_primes[number] = result
+        return result
 
 
 def is_palindrome(string: str) -> bool:

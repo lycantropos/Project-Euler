@@ -2,7 +2,7 @@ from itertools import permutations
 from typing import (Iterable,
                     Dict)
 
-from utils import (primes,
+from utils import (prime_numbers,
                    digits_to_number,
                    number_to_digits)
 
@@ -23,7 +23,7 @@ def sub_string_divisible_numbers(*,
             yield number
 
 
-primes_generator = primes(18)
+primes_generator = prime_numbers(18)
 slicers_by_divisors = {next(primes_generator): slice(start - 1, start + 2)
                        for start in range(2, 9)}
 
