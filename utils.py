@@ -80,7 +80,7 @@ proper_divisors = partial(factors,
                           start=2)
 
 
-def fibonacci(stop: Real = float('inf')) -> Iterable[int]:
+def fibonacci_numbers(stop: Real = float('inf')) -> Iterable[int]:
     a, b = 0, 1
     while b < stop:
         yield b

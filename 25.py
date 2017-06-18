@@ -1,4 +1,4 @@
-from utils import (fibonacci,
+from utils import (fibonacci_numbers,
                    number_digits_count)
 
 
@@ -7,7 +7,7 @@ def n_digits_fibonacci_number_index(digits_count: int) -> int:
         return number_digits_count(number) >= digits_count
 
     return next(index
-                for index, number in enumerate(fibonacci(), start=1)
+                for index, number in enumerate(fibonacci_numbers(), start=1)
                 if has_n_digits(number))
 
 
