@@ -3,7 +3,7 @@ from functools import (partial,
                        reduce)
 from itertools import (chain,
                        permutations)
-from math import sqrt
+from math import sqrt, factorial
 from numbers import Real
 from typing import (Any,
                     Iterable,
@@ -221,3 +221,8 @@ def is_perfect_square(number: int) -> bool:
 
 def int_sqrt(number: int) -> int:
     return int(sqrt(number))
+
+
+def binomial_coefficient(n: int, k: int) -> int:
+    numerators = range(n - k + 1, n + 1)
+    return multiply(numerators) // factorial(k)

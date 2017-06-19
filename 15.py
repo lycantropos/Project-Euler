@@ -21,14 +21,11 @@
 # and 2 is the position of bottom right corner after rotation.
 # Finally for NxN grid paths count can be found as "2 * N choose N".
 
-from math import factorial
-
-from utils import multiply
+from utils import binomial_coefficient
 
 
 def lattice_paths(grid_order: int) -> int:
-    numerators = range(grid_order + 1, 2 * grid_order + 1)
-    return multiply(numerators) // factorial(grid_order)
+    return binomial_coefficient(2 * grid_order, grid_order)
 
 
 assert lattice_paths(2) == 6
