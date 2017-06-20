@@ -21,9 +21,12 @@ concatenate_iterables = chain.from_iterable
 
 
 def chunks(elements: Sequence[Any],
-           size: int) -> Iterable[Sequence[Any]]:
+           size: int,
+           *,
+           exact: bool = False) -> Iterable[Sequence[Any]]:
     elements_count = len(elements)
-    for offset in range(elements_count):
+    stop = elements_count - size + 1 if exact else elements_count
+    for offset in range(stop):
         yield elements[offset:offset + size]
 
 
@@ -213,10 +216,9 @@ def pentagonial(number: int) -> bool:
 
 def is_perfect_square(number: int) -> bool:
     try:
-        integer_square_root = int_sqrt(number)
+        return sqrt(number).is_integer()
     except ValueError:
         return False
-    return integer_square_root * integer_square_root == number
 
 
 def int_sqrt(number: int) -> int:
