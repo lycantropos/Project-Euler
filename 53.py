@@ -2,7 +2,8 @@ import operator
 from functools import partial
 from itertools import product
 
-from utils import binomial_coefficient
+from utils import (binomial_coefficient,
+                   capacity)
 
 
 def combinatoric_selections(*,
@@ -19,4 +20,4 @@ values_greater_than_one_million = filter(partial(operator.lt, 1_000_000),
 
 assert binomial_coefficient(5, 3) == 10
 assert binomial_coefficient(23, 10) == 1_144_066
-assert sum(1 for _ in values_greater_than_one_million) == 4_075
+assert capacity(values_greater_than_one_million) == 4_075

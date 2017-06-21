@@ -5,7 +5,8 @@ from utils import (prime_numbers,
                    max_number,
                    digits_to_number,
                    number_to_digits,
-                   rotate)
+                   rotate,
+                   capacity)
 
 
 def circular_primes(number: int) -> Iterable[int]:
@@ -24,5 +25,6 @@ def circular_primes(number: int) -> Iterable[int]:
     yield from filter(is_circular, prime_numbers(number))
 
 
-assert list(circular_primes(100)) == [2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, 97]
-assert sum(1 for _ in circular_primes(1_000_000)) == 55
+assert list(circular_primes(100)) == [2, 3, 5, 7, 11, 13, 17,
+                                      31, 37, 71, 73, 79, 97]
+assert capacity(circular_primes(1_000_000)) == 55

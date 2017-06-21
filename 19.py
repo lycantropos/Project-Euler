@@ -1,6 +1,8 @@
 from datetime import date
 from itertools import product
 
+from utils import capacity
+
 weekdays = ['Monday',
             'Tuesday',
             'Wednesday',
@@ -29,8 +31,8 @@ def weekdays_count(*,
     def is_target_weekday(weekday: int) -> bool:
         return weekday == target_weekday
 
-    return sum(1 for _ in filter(is_target_weekday,
-                                 first_months_days_weekdays))
+    return capacity(filter(is_target_weekday,
+                           first_months_days_weekdays))
 
 
 assert weekdays_count(year_start=1901,

@@ -1,6 +1,7 @@
 from utils import (number_to_digits,
                    digits_to_number,
-                   is_palindrome)
+                   is_palindrome,
+                   capacity)
 
 MAX_ITERATIONS_COUNT = 50
 
@@ -16,4 +17,4 @@ def lychrel(number: int) -> bool:
 assert not lychrel(47)
 assert not lychrel(349)
 assert lychrel(196)
-assert sum(1 for _ in filter(lychrel, range(1, 10_000))) == 249
+assert capacity(filter(lychrel, range(1, 10_000))) == 249

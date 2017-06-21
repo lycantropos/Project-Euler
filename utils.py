@@ -228,3 +228,7 @@ def int_sqrt(number: int) -> int:
 def binomial_coefficient(n: int, k: int) -> int:
     numerators = range(n - k + 1, n + 1)
     return multiply(numerators) // factorial(k)
+
+
+def capacity(iterable: Iterable[Any]) -> int:
+    return sum(1 for _ in iterable)

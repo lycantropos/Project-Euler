@@ -1,7 +1,8 @@
 from string import ascii_uppercase
 
 from utils import (parse_lines,
-                   triangular)
+                   triangular,
+                   capacity)
 
 letters_positions = {letter: position
                      for position, letter in enumerate(ascii_uppercase,
@@ -20,4 +21,4 @@ with open('words.txt') as words_file:
 triangular_words = filter(triangular_word, words)
 
 assert triangular_word('SKY')
-assert sum(1 for _ in triangular_words) == 162
+assert capacity(triangular_words) == 162
