@@ -14,21 +14,19 @@
 # we can see that in top right corner there's always squared dimension
 # and values on other corners can be found by subtraction of (dimension - 1)
 # from previous corner in counterclockwise direction
+from itertools import chain
+
+from utils import (SPIRAL_START,
+                   spiral_corners)
 
 
-def number_spiral_diagonals(dimension: int) -> int:
-    result = 1
-    for turn in range(3, dimension + 2, 2):
-        decrement = turn - 1
-        right_top_number = turn * turn
-        left_top_number = right_top_number - decrement
-        left_bottom_number = left_top_number - decrement
-        right_bottom_number = left_bottom_number - decrement
-        result += (right_top_number
-                   + left_top_number
-                   + left_bottom_number
-                   + right_bottom_number)
-    return result
+def number_spiral_diagonals(dimension: int,
+                            *,
+                            start=SPIRAL_START) -> int:
+    return sum((chain
+                .from_iterable(spiral_corners(dimension,
+                                              start=start))),
+               start)
 
 
 assert number_spiral_diagonals(1) == 1

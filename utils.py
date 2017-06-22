@@ -3,7 +3,8 @@ from functools import (partial,
                        reduce)
 from itertools import (chain,
                        permutations)
-from math import sqrt, factorial
+from math import (sqrt,
+                  factorial)
 from numbers import Real
 from typing import (Any,
                     Iterable,
@@ -12,8 +13,11 @@ from typing import (Any,
                     Tuple,
                     List)
 
+SPIRAL_START = 1
+
 memoized_primes = {1: False,
                    2: True}
+memoized_spiral_corners = dict()
 
 multiply = partial(reduce, operator.mul)
 
@@ -232,3 +236,21 @@ def binomial_coefficient(n: int, k: int) -> int:
 
 def capacity(iterable: Iterable[Any]) -> int:
     return sum(1 for _ in iterable)
+
+
+def spiral_corners(dimension: int,
+                   *,
+                   start: int = SPIRAL_START
+                   ) -> Iterable[Tuple]:
+    for dimension in range(3, dimension + 2, 2):
+        try:
+            yield memoized_spiral_corners[dimension]
+        except KeyError:
+            decrement = dimension - 1
+            right_top = dimension * dimension + start - 1
+            left_top = right_top - decrement
+            left_bottom = left_top - decrement
+            right_bottom = left_bottom - decrement
+            corners = right_bottom, left_bottom, left_top, right_top
+            memoized_spiral_corners[dimension] = corners
+            yield corners
