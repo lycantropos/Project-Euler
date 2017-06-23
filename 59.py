@@ -30,7 +30,7 @@ def guess_password(*,
                    codes: Sequence[int],
                    password_domain: Iterable[int],
                    password_length: int,
-                   text_characters: Container[str] = printable
+                   text_characters: Container[str]
                    ) -> Sequence[int]:
     for password in valid_passwords(codes=codes,
                                     password_domain=password_domain,
@@ -60,18 +60,27 @@ def valid_passwords(*,
     yield from product(*valid_passwords_codes)
 
 
-def xor_decryption(codes: Sequence[int]) -> Iterable[int]:
+def xor_decryption(*,
+                   codes: Sequence[int],
+                   password_domain: Iterable[int],
+                   password_length: int,
+                   text_characters: Container[str] = printable
+                   ) -> Iterable[int]:
     password, = guess_password(codes=codes,
-                               password_domain=range(ord('a'),
-                                                     ord('z') + 1),
-                               password_length=3)
-    return decrypt(codes=codes,
-                   password=password)
+                               password_domain=password_domain,
+                               password_length=password_length,
+                               text_characters=text_characters)
+    yield from decrypt(codes=codes,
+                       password=password)
 
 
-with open('cipher.txt') as ciphers_file:
-    ciphers_str = ciphers_file.read()
-ciphers = list(map(int, ciphers_str.split(',')))
-decrypted = xor_decryption(ciphers)
+with open('cipher.txt') as text_codes_file:
+    text_codes_str = text_codes_file.read()
+text_codes = list(map(int, text_codes_str.split(',')))
+lower_case_characters_codes = range(ord('a'), ord('z') + 1)
+decrypted_text_codes = xor_decryption(
+    codes=text_codes,
+    password_domain=lower_case_characters_codes,
+    password_length=3)
 
-assert sum(decrypted) == 107_359
+assert sum(decrypted_text_codes) == 107_359
