@@ -1,4 +1,5 @@
 import operator
+import re
 from functools import (partial,
                        reduce)
 from itertools import (chain,
@@ -14,6 +15,47 @@ from typing import (Any,
                     List)
 
 SPIRAL_START = 1
+WORDS_RE = re.compile(r'\b\w+\b')
+FIRST_LETTERS_FOLLOWERS = {
+    'a': {'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+          'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+          'r', 's', 't', 'u', 'v', 'w', 'x', 'z'},
+    'b': {'a', 'e', 'i', 'l', 'o', 'r', 'u', 'y'},
+    'c': {'a', 'e', 'h', 'i', 'l',
+          'o', 'r', 'u', 'y'},
+    'd': {'a', 'e', 'i', 'o', 'r', 'u', 'w', 'y'},
+    'e': {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'i',
+          'j', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+          's', 't', 'u', 'v', 'x', 'y'},
+    'f': {'a', 'e', 'i', 'j', 'l', 'o', 'r', 'u'},
+    'g': {'a', 'e', 'h', 'i', 'l',
+          'n', 'o', 'r', 'u', 'y'},
+    'h': {'a', 'e', 'i', 'o', 'u', 'y'},
+    'i': {'a', 'b', 'c', 'd', 'f', 'g', 'l',
+          'm', 'n', 'o', 'r', 's', 't', 'v'},
+    'j': {'a', 'e', 'i', 'o', 'u'},
+    'k': {'a', 'e', 'i', 'l', 'n', 'o', 'r', 'u'},
+    'l': {'a', 'e', 'i', 'l', 'o', 'u', 'y'},
+    'm': {'a', 'e', 'i', 'n', 'o', 'u', 'y'},
+    'n': {'a', 'e', 'i', 'o', 'u', 'y'},
+    'o': {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+          'i', 'k', 'l', 'm', 'n', 'o', 'p', 'r',
+          's', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
+    'p': {'a', 'e', 'h', 'i', 'l', 'n', 'o', 'r',
+          's', 't', 'u', 'y'},
+    'q': {'u'},
+    'r': {'a', 'e', 'h', 'i', 'o', 'u', 'y'},
+    's': {'a', 'c', 'e', 'h', 'i', 'k', 'l', 'm',
+          'n', 'o', 'p', 'q', 't', 'u', 'w', 'y'},
+    't': {'a', 'e', 'h', 'i', 'o', 'r', 's', 'u',
+          'w', 'y'},
+    'u': {'b', 'd', 'g', 'k', 'l', 'm', 'n', 'p',
+          'r', 's', 't'},
+    'v': {'a', 'e', 'i', 'o', 'u', 'y'},
+    'w': {'a', 'e', 'h', 'i', 'o', 'r', 'u'},
+    'x': {'e', 'y'},
+    'y': {'a', 'e', 'i', 'o', 'u'},
+    'z': {'a', 'e', 'i', 'o', 'y'}}
 
 memoized_primes = {1: False,
                    2: True}
@@ -254,3 +296,33 @@ def spiral_corners(dimension: int,
             corners = right_bottom, left_bottom, left_top, right_top
             memoized_spiral_corners[dimension] = corners
             yield corners
+
+
+def english_text(text: str,
+                 *,
+                 acceptable_non_english_words_ratio: float = 0.1
+                 ) -> bool:
+    word_index = 0
+    non_english_words_count = 0
+    for word_index, word in enumerate(map(str.lower, words(text)),
+                                      start=1):
+        try:
+            first_letter, second_letter, *_ = word
+            if second_letter not in FIRST_LETTERS_FOLLOWERS[first_letter]:
+                non_english_words_count += 1
+        except ValueError:
+            # single-letter word
+            continue
+    try:
+        # in the end word index corresponds to words count
+        non_english_words_ratio = non_english_words_count / word_index
+    except ZeroDivisionError:
+        return False
+    else:
+        return non_english_words_ratio <= acceptable_non_english_words_ratio
+
+
+def words(text: str) -> Iterable[str]:
+    yield from filter(str.isalpha,
+                      (word.group(0)
+                       for word in WORDS_RE.finditer(text)))
