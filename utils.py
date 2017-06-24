@@ -8,7 +8,6 @@ from math import (sqrt,
                   factorial)
 from numbers import Real
 from typing import (Any,
-                    Optional,
                     Callable,
                     Hashable,
                     Iterable,
@@ -260,7 +259,7 @@ def triangular(number: int) -> bool:
     return is_perfect_square(discriminant)
 
 
-def pentagonial(number: int) -> bool:
+def pentagonal(number: int) -> bool:
     discriminant = 1 + 24 * number
     return (is_perfect_square(discriminant) and
             (1 + int_sqrt(discriminant)) % 6 == 0)

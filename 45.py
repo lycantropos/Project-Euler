@@ -2,7 +2,7 @@ from itertools import count
 from typing import Iterator
 
 from utils import (triangular,
-                   pentagonial)
+                   pentagonal)
 
 
 def hexagonal_number(index: int) -> int:
@@ -12,7 +12,7 @@ def hexagonal_number(index: int) -> int:
 def triangular_pentagonal_hexagonal_numbers(start: int) -> Iterator[int]:
     hexagonal_numbers = map(hexagonal_number, count(start))
     triangular_hexagonal_numbers = filter(triangular, hexagonal_numbers)
-    yield from filter(pentagonial, triangular_hexagonal_numbers)
+    yield from filter(pentagonal, triangular_hexagonal_numbers)
 
 
 numbers_generator = triangular_pentagonal_hexagonal_numbers(1)
