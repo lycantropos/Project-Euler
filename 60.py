@@ -1,6 +1,5 @@
 from itertools import product
 from typing import (Any,
-                    Union,
                     Iterable,
                     Iterator,
                     Dict,
@@ -20,33 +19,22 @@ def primes_chains(stop: int) -> Iterable[List[int]]:
     primes_pairs_dict = dict(zip(parents, map(set, children)))
 
     for number, pairs in sorted(primes_pairs_dict.items()):
-        for tree in trees(chain=pairs,
-                          links=primes_pairs_dict):
-            yield from chains(tree,
-                              links=[number])
+        for chain in chains(chain=pairs,
+                            links=primes_pairs_dict):
+            yield [number] + chain
 
 
-def trees(chain: Set[Any],
-          links: Dict[Any, Set[Any]]
-          ) -> Iterable[Tuple[int, List[int]]]:
+def chains(chain: Set[Any],
+           links: Dict[Any, Set[Any]]
+           ) -> Iterable[List[int]]:
     for link in chain:
         linkage = chain & links[link]
         if linkage:
-            yield link, list(trees(linkage,
-                                   links))
-    yield from chain
-
-
-def chains(tree: Union[int, Iterable[Tuple[int, List[int]]]],
-           links: List[int]) -> Iterable[List[int]]:
-    try:
-        link, rest = tree
-    except TypeError:
-        yield links + [tree]
-    else:
-        for sub_chain in rest:
-            yield from chains(sub_chain,
-                              links=links + [link])
+            for subchain in chains(linkage,
+                                   links):
+                yield [link] + subchain
+    for link in chain:
+        yield [link]
 
 
 def primes_pairs(stop: int) -> Iterable[Tuple[int, int]]:
@@ -54,7 +42,7 @@ def primes_pairs(stop: int) -> Iterable[Tuple[int, int]]:
 
     # we're skipping 2
     # because right concatenation with it
-    # will always give even (hence non-prime) number
+    # always gives even (hence non-prime) number
     prime_numbers_set = set(prime_numbers_generator)
     numbers_by_digits_count = collect_mapping(
         digits_counts_numbers(prime_numbers_set))
