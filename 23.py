@@ -9,7 +9,7 @@ from typing import Iterable
 from utils import proper_divisors
 
 
-def is_abundant(number: int) -> bool:
+def abundant(number: int) -> bool:
     return sum(proper_divisors(number)) > number
 
 
@@ -19,7 +19,7 @@ def non_abundant_numbers_sum(*,
                              step: int = 1
                              ) -> Iterable[int]:
     numbers = range(2, stop)
-    target_abundant_numbers = OrderedDict(zip_longest(filter(is_abundant,
+    target_abundant_numbers = OrderedDict(zip_longest(filter(abundant,
                                                              numbers),
                                                       []))
 
@@ -39,8 +39,8 @@ def non_abundant_numbers_sum(*,
                        range(start, stop, step))
 
 
-assert all(not is_abundant(number)
+assert all(not abundant(number)
            for number in range(1, 12))
-assert is_abundant(12)
+assert abundant(12)
 assert 24 not in list(non_abundant_numbers_sum(stop=25))
 assert sum(non_abundant_numbers_sum(stop=28_124)) == 4_179_871

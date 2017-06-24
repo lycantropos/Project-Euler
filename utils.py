@@ -8,7 +8,13 @@ from math import (sqrt,
                   factorial)
 from numbers import Real
 from typing import (Any,
+                    Optional,
+                    Callable,
+                    Hashable,
                     Iterable,
+                    Iterator,
+                    MutableMapping,
+                    MutableSequence,
                     Sequence,
                     Set,
                     Tuple,
@@ -138,7 +144,7 @@ def fibonacci_numbers(stop: Real = float('inf')) -> Iterable[int]:
 
 def prime_numbers(stop: int,
                   *,
-                  reverse: bool = False) -> List[int]:
+                  reverse: bool = False) -> Iterator[int]:
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
     # TODO: refactor this mess
@@ -326,3 +332,10 @@ def words(text: str) -> Iterable[str]:
     yield from filter(str.isalpha,
                       (word.group(0)
                        for word in WORDS_RE.finditer(text)))
+
+
+def star_filter(function: Callable[..., bool],
+                iterable: Iterable) -> Iterator[Any]:
+    yield from (element
+                for element in iterable
+                if function(*element))

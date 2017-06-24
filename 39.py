@@ -11,7 +11,7 @@ def integer_right_triangles(max_perimeter: int
         return sum(triplet) <= max_perimeter
 
     yield from filter(is_perimeter_valid,
-                      (triplet for triplet in pythagorean_triplets(max_perimeter)))
+                      pythagorean_triplets(max_perimeter))
 
 
 perimeters_counter = Counter(map(sum, integer_right_triangles(1_000)))

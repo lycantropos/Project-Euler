@@ -9,11 +9,11 @@ from utils import (prime_numbers,
                    capacity)
 
 
-def circular_primes(number: int) -> Iterable[int]:
-    primes_stop = max_number(number_digits_count(number))
+def circular_primes(stop: int) -> Iterable[int]:
+    primes_stop = max_number(number_digits_count(stop))
     primes_set = set(prime_numbers(primes_stop))
 
-    def is_circular(prime_number: int) -> bool:
+    def circular(prime_number: int) -> bool:
         digits = tuple(number_to_digits(prime_number))
         rotated_digits = (rotate(digits, position)
                           for position in range(len(digits)))
@@ -22,7 +22,7 @@ def circular_primes(number: int) -> Iterable[int]:
                 return False
         return True
 
-    yield from filter(is_circular, prime_numbers(number))
+    yield from filter(circular, prime_numbers(stop))
 
 
 assert list(circular_primes(100)) == [2, 3, 5, 7, 11, 13, 17,

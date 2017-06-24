@@ -1,11 +1,12 @@
+import operator
 from fractions import Fraction
 from itertools import permutations
-from typing import (Iterable,
-                    Tuple)
+from typing import Iterable
 
 from utils import (multiply,
                    number_to_digits,
-                   digits_to_number)
+                   digits_to_number,
+                   star_filter)
 
 
 def curious_fractions(*,
@@ -15,9 +16,9 @@ def curious_fractions(*,
                       ) -> Iterable[Fraction]:
     numbers = range(start, stop, step)
     fractions_parts = permutations(numbers, r=2)
-    filtered_fractions_parts = filter(non_trivial_fraction,
-                                      filter(less_than_one_in_value,
-                                             fractions_parts))
+    filtered_fractions_parts = star_filter(non_trivial_fraction,
+                                           star_filter(operator.lt,
+                                                       fractions_parts))
     for numerator, denominator in filtered_fractions_parts:
         numerator_digits = list(number_to_digits(numerator))
         denominator_digits = list(number_to_digits(denominator))
@@ -33,7 +34,8 @@ def curious_fractions(*,
             cancelled_denominator_digits.remove(common_digit)
 
             cancelled_numerator = digits_to_number(cancelled_numerator_digits)
-            cancelled_denominator = digits_to_number(cancelled_denominator_digits)
+            cancelled_denominator = digits_to_number(
+                cancelled_denominator_digits)
 
             fraction = Fraction(numerator, denominator)
             cancelled_fraction = Fraction(cancelled_numerator,
@@ -43,13 +45,7 @@ def curious_fractions(*,
                 yield fraction
 
 
-def less_than_one_in_value(fraction_parts: Tuple[int, int]) -> bool:
-    numerator, denominator = fraction_parts
-    return numerator < denominator
-
-
-def non_trivial_fraction(fraction_parts: Tuple[int, int]) -> bool:
-    numerator, denominator = fraction_parts
+def non_trivial_fraction(numerator: int, denominator: int) -> bool:
     return bool(numerator % 10 and denominator % 10)
 
 
