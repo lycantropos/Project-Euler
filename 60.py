@@ -10,7 +10,8 @@ from typing import (Any,
 from utils import (prime_numbers,
                    number_digits_count,
                    collect_mapping,
-                   star_filter)
+                   star_filter,
+                   map_tuples)
 
 
 def primes_chains(stop: int) -> Iterable[List[int]]:
@@ -43,9 +44,11 @@ def primes_pairs(stop: int) -> Iterable[Tuple[int, int]]:
     # we're skipping 2
     # because right concatenation with it
     # always gives even (hence non-prime) number
+    next(prime_numbers_generator)
     prime_numbers_set = set(prime_numbers_generator)
     numbers_by_digits_count = collect_mapping(
-        digits_counts_numbers(prime_numbers_set))
+        map_tuples(prime_numbers_set,
+                   function=number_digits_count))
 
     def primes_paired(prime_number: int,
                       other_prime_number: int) -> bool:
@@ -69,12 +72,6 @@ def primes_pairs(stop: int) -> Iterable[Tuple[int, int]]:
                 yield reversed(pair)
 
 
-def digits_counts_numbers(numbers: Iterable[int]
-                          ) -> Iterable[Tuple[int, int]]:
-    for number in numbers:
-        yield number_digits_count(number), number
-
-
 def prime_pair_sets(*,
                     stop: int,
                     target_chain_length: int) -> Iterator[List[int]]:
@@ -89,5 +86,6 @@ first_five_elements_primes_chain = next(prime_pair_sets(stop=100_000_000,
                                                         target_chain_length=5))
 
 assert set(first_four_elements_primes_chain) == {3, 7, 109, 673}
-assert set(first_five_elements_primes_chain) == {13, 5701, 5197, 6733, 8389}
+assert set(first_five_elements_primes_chain) == {13, 5_701, 5_197,
+                                                 6_733, 8_389}
 assert sum(first_five_elements_primes_chain) == 26_033

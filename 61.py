@@ -85,6 +85,7 @@ triangular_to_octagonal_cycle = max(
                                dimensions=range(3, 9)),
     key=len)
 
-assert triangular_to_pentagonal_cycle == (8128, 2882, 8281)
-assert triangular_to_octagonal_cycle == (8256, 5625, 2512, 1281, 8128, 2882)
+assert triangular_to_pentagonal_cycle == (8_128, 2_882, 8_281)
+assert triangular_to_octagonal_cycle == (8_256, 5_625, 2_512,
+                                         1_281, 8_128, 2_882)
 assert sum(triangular_to_octagonal_cycle) == 28_684

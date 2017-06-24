@@ -82,6 +82,24 @@ def star_filter(function: Callable[..., bool],
                 if function(*element))
 
 
+def map_tuples(elements: Iterable[int],
+               *,
+               function: Callable[[Any], Any]
+               ) -> Iterable[Tuple[int, int]]:
+    for number in elements:
+        yield function(number), number
+
+
+def collect_mapping(keys_values: Iterable[Tuple[Hashable, Any]],
+                    mapping_type: Callable[[], MutableMapping] = dict,
+                    values_container: Callable[[], MutableSequence] = list
+                    ) -> MutableMapping:
+    dictionary = mapping_type()
+    for key, value in keys_values:
+        dictionary.setdefault(key, values_container()).append(value)
+    return dictionary
+
+
 def chunks(elements: Sequence[Any],
            size: int,
            *,
@@ -294,9 +312,9 @@ def polygonal(number: int,
     return (is_perfect_square(discriminant) and
             (minus_b + int_sqrt(discriminant)) % (2 * a) == 0)
 
+
 triangular = partial(polygonal,
                      dimension=3)
-
 
 pentagonal = partial(polygonal,
                      dimension=5)
@@ -364,13 +382,3 @@ def words(text: str) -> Iterable[str]:
     yield from filter(str.isalpha,
                       (word.group(0)
                        for word in WORDS_RE.finditer(text)))
-
-
-def collect_mapping(keys_values: Iterable[Tuple[Hashable, Any]],
-                    mapping_type: Callable[[], MutableMapping] = dict,
-                    values_container: Callable[[], MutableSequence] = list
-                    ) -> MutableMapping:
-    dictionary = mapping_type()
-    for key, value in keys_values:
-        dictionary.setdefault(key, values_container()).append(value)
-    return dictionary
