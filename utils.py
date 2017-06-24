@@ -339,3 +339,13 @@ def star_filter(function: Callable[..., bool],
     yield from (element
                 for element in iterable
                 if function(*element))
+
+
+def collect_mapping(keys_values: Iterable[Tuple[Hashable, Any]],
+                    mapping_type: Callable[[], MutableMapping] = dict,
+                    values_container: Callable[[], MutableSequence] = list
+                    ) -> MutableMapping:
+    dictionary = mapping_type()
+    for key, value in keys_values:
+        dictionary.setdefault(key, values_container()).append(value)
+    return dictionary
