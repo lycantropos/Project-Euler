@@ -71,6 +71,17 @@ multiply = partial(reduce, operator.mul)
 concatenate_iterables = chain.from_iterable
 
 
+def capacity(iterable: Iterable[Any]) -> int:
+    return sum(1 for _ in iterable)
+
+
+def star_filter(function: Callable[..., bool],
+                iterable: Iterable) -> Iterator[Any]:
+    yield from (element
+                for element in iterable
+                if function(*element))
+
+
 def chunks(elements: Sequence[Any],
            size: int,
            *,
@@ -81,9 +92,21 @@ def chunks(elements: Sequence[Any],
         yield elements[offset:offset + size]
 
 
+def sort_permutation(permutation: Sequence[int]) -> Sequence[int]:
+    min_index, _ = min(enumerate(permutation),
+                       key=operator.itemgetter(1))
+    return rotate(permutation, min_index)
+
+
 def rotate(sequence: Sequence[Any],
            position: int) -> Sequence[Any]:
     return sequence[position:] + sequence[:position]
+
+
+def bisect(sequence: Sequence[Any]) -> Tuple[Sequence[Any],
+                                             Sequence[Any]]:
+    middle = len(sequence) // 2
+    return sequence[:middle], sequence[middle:]
 
 
 def parse_lines(lines: Iterable[str],
@@ -254,15 +277,29 @@ def pythagorean_triplets_candidates(stop: int
                         for coordinate in candidate)
 
 
-def triangular(number: int) -> bool:
-    discriminant = 1 + 8 * number
-    return is_perfect_square(discriminant)
+def polygonal(number: int,
+              *,
+              dimension: int) -> bool:
+    """
+    Polygonal numbers has form:
+        number = [(dimension - 2) * index ** 2 - (dimension - 4) * index] / 2
 
-
-def pentagonal(number: int) -> bool:
-    discriminant = 1 + 24 * number
+    from
+    https://en.wikipedia.org/wiki/Polygonal_number
+    """
+    a = dimension - 2
+    minus_b = dimension - 4
+    minus_c = 2 * number
+    discriminant = minus_b ** 2 + 4 * a * minus_c
     return (is_perfect_square(discriminant) and
-            (1 + int_sqrt(discriminant)) % 6 == 0)
+            (minus_b + int_sqrt(discriminant)) % (2 * a) == 0)
+
+triangular = partial(polygonal,
+                     dimension=3)
+
+
+pentagonal = partial(polygonal,
+                     dimension=5)
 
 
 def is_perfect_square(number: int) -> bool:
@@ -279,10 +316,6 @@ def int_sqrt(number: int) -> int:
 def binomial_coefficient(n: int, k: int) -> int:
     numerators = range(n - k + 1, n + 1)
     return multiply(numerators) // factorial(k)
-
-
-def capacity(iterable: Iterable[Any]) -> int:
-    return sum(1 for _ in iterable)
 
 
 def spiral_corners(dimension: int,
@@ -331,13 +364,6 @@ def words(text: str) -> Iterable[str]:
     yield from filter(str.isalpha,
                       (word.group(0)
                        for word in WORDS_RE.finditer(text)))
-
-
-def star_filter(function: Callable[..., bool],
-                iterable: Iterable) -> Iterator[Any]:
-    yield from (element
-                for element in iterable
-                if function(*element))
 
 
 def collect_mapping(keys_values: Iterable[Tuple[Hashable, Any]],
