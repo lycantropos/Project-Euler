@@ -68,8 +68,6 @@ memoized_spiral_corners = dict()
 
 multiply = partial(reduce, operator.mul)
 
-concatenate_iterables = chain.from_iterable
-
 
 def capacity(iterable: Iterable[Any]) -> int:
     return sum(1 for _ in iterable)
@@ -100,14 +98,14 @@ def collect_mapping(keys_values: Iterable[Tuple[Hashable, Any]],
     return dictionary
 
 
-def chunks(elements: Sequence[Any],
+def chunks(sequence: Sequence[Any],
            size: int,
            *,
            exact: bool = False) -> Iterable[Sequence[Any]]:
-    elements_count = len(elements)
+    elements_count = len(sequence)
     stop = elements_count - size + 1 if exact else elements_count
     for offset in range(stop):
-        yield elements[offset:offset + size]
+        yield sequence[offset:offset + size]
 
 
 def sort_permutation(permutation: Sequence[int]) -> Sequence[int]:
@@ -165,7 +163,7 @@ def factors(number: int,
             start: int = 1) -> Set[int]:
     return set(
         chain([1],
-              concatenate_iterables(
+              chain.from_iterable(
                   (factor, number // factor)
                   for factor in range(start, max_factor(number) + 1)
                   if number % factor == 0)))
