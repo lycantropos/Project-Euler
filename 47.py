@@ -29,8 +29,11 @@ def distinct_primes_factors(*,
 
 
 assert distinct_primes_factors(consecutive_numbers_count=2,
-                               distinct_prime_factors_count=2) == [14, 15]
+                               distinct_prime_factors_count=2
+                               ) == [14, 15]
 assert distinct_primes_factors(consecutive_numbers_count=3,
-                               distinct_prime_factors_count=3) == [644, 645, 646]
+                               distinct_prime_factors_count=3
+                               ) == [644, 645, 646]
 assert min(distinct_primes_factors(consecutive_numbers_count=4,
-                                   distinct_prime_factors_count=4)) == 134_043
+                                   distinct_prime_factors_count=4
+                                   )) == 134_043
