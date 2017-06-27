@@ -1,6 +1,7 @@
 from decimal import (Decimal,
                      Context,
                      setcontext)
+from functools import partial
 from itertools import (count,
                        islice,
                        filterfalse)
@@ -47,6 +48,28 @@ def continued_fraction(number: int) -> Iterable[int]:
         yield int(b_coefficient(index))
 
 
+def period(number: int,
+           *,
+           members_count_start: int,
+           members_count_step: int,
+           precision_start: int,
+           precision_step: int,
+           precision_stop: int) -> Sequence[int]:
+    for members_count in count(members_count_start,
+                               members_count_step):
+        for precision in range(precision_start,
+                               precision_stop,
+                               precision_step):
+            context = Context(prec=precision)
+            setcontext(context)
+            sequence = list(islice(continued_fraction(number),
+                                   1,
+                                   members_count))
+            cycle = find_cycle(sequence)
+            if cycle is not None:
+                return cycle
+
+
 def odd_period_square_roots(*,
                             start: int = 1,
                             stop: int,
@@ -57,43 +80,15 @@ def odd_period_square_roots(*,
                             precision_step: int = 250,
                             precision_stop: int = 2_501) -> int:
     numbers = range(start, stop, step)
-    numbers = list(filterfalse(is_perfect_square, numbers))
-    cycles_lengths = map(len,
-                         periods(numbers,
-                                 members_count_start=members_count_start,
-                                 members_count_step=members_count_step,
-                                 precision_start=precision_start,
-                                 precision_step=precision_step,
-                                 precision_stop=precision_stop))
+    numbers = filterfalse(is_perfect_square, numbers)
+    number_period = partial(period,
+                            members_count_start=members_count_start,
+                            members_count_step=members_count_step,
+                            precision_start=precision_start,
+                            precision_step=precision_step,
+                            precision_stop=precision_stop)
+    cycles_lengths = map(len, map(number_period, numbers))
     return sum(map(odd, cycles_lengths))
-
-
-def periods(numbers: Iterable[int],
-            *,
-            members_count_start: int,
-            members_count_step: int,
-            precision_start: int,
-            precision_step: int,
-            precision_stop: int) -> Sequence[int]:
-    for number in numbers:
-        for members_count in count(members_count_start,
-                                   members_count_step):
-            for precision in range(precision_start,
-                                   precision_stop,
-                                   precision_step):
-                context = Context(prec=precision)
-                setcontext(context)
-                sequence = list(islice(continued_fraction(number),
-                                       1,
-                                       members_count))
-                cycle = find_cycle(sequence)
-                if cycle is None:
-                    continue
-                yield cycle
-                break
-            else:
-                continue
-            break
 
 
 assert odd_period_square_roots(stop=14) == 4
