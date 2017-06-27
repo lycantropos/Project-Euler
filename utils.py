@@ -477,3 +477,15 @@ def sqrt_convergent(number: int,
     for coefficient in reversed(coefficients):
         increment = coefficient + Fraction(1, increment)
     return first_coefficient + Fraction(1, increment)
+
+
+def maximum_path_sum(*,
+                     rows: Iterable[Iterable[int]],
+                     successors_count: int) -> int:
+    rows_reversed = reversed(rows)
+    next_row = next(rows_reversed)
+    for row in rows_reversed:
+        next_row = tuple(number + max(next_row[index:index + successors_count])
+                         for index, number in enumerate(row))
+    result, = next_row
+    return result

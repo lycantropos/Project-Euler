@@ -1,17 +1,4 @@
-from typing import Iterable
-
-
-def maximum_path_sum(*,
-                     rows: Iterable[Iterable[int]],
-                     successors_count: int) -> int:
-    rows_reversed = reversed(rows)
-    next_row = next(rows_reversed)
-    for row in rows_reversed:
-        next_row = tuple(number + max(next_row[index:index + successors_count])
-                         for index, number in enumerate(row))
-    result, = next_row
-    return result
-
+from utils import maximum_path_sum
 
 example = ((3,),
            (7, 4),
