@@ -11,11 +11,7 @@ def number_to_sorted_digits_tuple(number: int) -> Tuple[int, ...]:
     return tuple(sorted(number_to_digits(number)))
 
 
-def cubic_permutations(*,
-                       start: int = 1,
-                       stop: int,
-                       step: int = 1) -> Iterable[Set[int]]:
-    numbers = range(start, stop, step)
+def cubic_permutations(numbers: Iterable[int]) -> Iterable[Set[int]]:
     cubes = [number ** 3
              for number in numbers]
     digits_cubes = map_tuples(cubes,
@@ -25,11 +21,11 @@ def cubic_permutations(*,
 
 first_three_elements_permutation = next(
     permutation
-    for permutation in cubic_permutations(stop=10_000)
+    for permutation in cubic_permutations(range(10_000))
     if len(permutation) == 3)
 first_five_elements_permutation = next(
     permutation
-    for permutation in cubic_permutations(stop=10_000)
+    for permutation in cubic_permutations(range(10_000))
     if len(permutation) == 5)
 
 assert first_three_elements_permutation == [41_063_625, 56_623_104, 66_430_125]

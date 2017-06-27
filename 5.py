@@ -16,17 +16,14 @@ def prime_factors(number: int) -> Iterable[int]:
     yield number
 
 
-def evenly_divisible(*,
-                     start: int = 1,
-                     stop: int,
-                     step: int = 1) -> int:
+def evenly_divisible(numbers: Iterable[int]) -> int:
     divisors = Counter()
-    for number in range(start, stop, step):
+    for number in numbers:
         factors_counter = Counter(prime_factors(number))
         for key, value in factors_counter.items():
             divisors[key] = max(divisors[key], value)
     return reduce(operator.mul, starmap(pow, divisors.items()))
 
 
-assert evenly_divisible(stop=10) == 2520
-assert evenly_divisible(stop=20) == 232_792_560
+assert evenly_divisible(range(1, 10)) == 2520
+assert evenly_divisible(range(1, 20)) == 232_792_560

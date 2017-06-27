@@ -9,12 +9,7 @@ from utils import (multiply,
                    star_filter)
 
 
-def curious_fractions(*,
-                      start: int,
-                      stop: int,
-                      step: int = 1
-                      ) -> Iterable[Fraction]:
-    numbers = range(start, stop, step)
+def curious_fractions(numbers: Iterable[int]) -> Iterable[Fraction]:
     fractions_parts = permutations(numbers, r=2)
     filtered_fractions_parts = star_filter(non_trivial_fraction,
                                            star_filter(operator.lt,
@@ -49,5 +44,4 @@ def non_trivial_fraction(numerator: int, denominator: int) -> bool:
     return bool(numerator % 10 and denominator % 10)
 
 
-assert multiply(curious_fractions(start=10,
-                                  stop=100)).denominator == 100
+assert multiply(curious_fractions(numbers=range(10, 100))).denominator == 100

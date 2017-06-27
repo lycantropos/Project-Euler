@@ -19,16 +19,6 @@ def max_digits_factorials_sum_digits_count() -> int:
                             count(1)))
 
 
-def digit_factorials(*,
-                     step: int = 1) -> Iterable[int]:
-    digits_count = max_digits_factorials_sum_digits_count()
-    stop = 10 ** digits_count
-    candidates = filter(is_digits_factorials_sum_candidate,
-                        range(3, stop, step))
-    yield from filter(is_digits_factorials_sum,
-                      candidates)
-
-
 def is_digits_factorials_sum(number: int) -> bool:
     digits_factorials_sum = sum(digits_factorials[digit]
                                 for digit in number_to_digits(number))
@@ -41,6 +31,15 @@ def is_digits_factorials_sum_candidate(number: int) -> bool:
     ones_count = digits.count(1)
     last_digit = digits[-1]
     return last_digit % 2 == (zeros_count + ones_count) % 2
+
+
+def digit_factorials() -> Iterable[int]:
+    digits_count = max_digits_factorials_sum_digits_count()
+    stop = 10 ** digits_count
+    candidates = filter(is_digits_factorials_sum_candidate,
+                        range(3, stop))
+    yield from filter(is_digits_factorials_sum,
+                      candidates)
 
 
 assert is_digits_factorials_sum(145)

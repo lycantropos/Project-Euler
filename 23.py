@@ -13,12 +13,7 @@ def abundant(number: int) -> bool:
     return sum(proper_divisors(number)) > number
 
 
-def non_abundant_numbers_sum(*,
-                             start: int = 1,
-                             stop: int,
-                             step: int = 1
-                             ) -> Iterable[int]:
-    numbers = range(2, stop)
+def non_abundant_numbers_sum(numbers: Iterable[int]) -> Iterable[int]:
     target_abundant_numbers = OrderedDict(zip_longest(filter(abundant,
                                                              numbers),
                                                       []))
@@ -35,12 +30,11 @@ def non_abundant_numbers_sum(*,
                 return True
         return False
 
-    return filterfalse(is_abundant_numbers_sum,
-                       range(start, stop, step))
+    return filterfalse(is_abundant_numbers_sum, numbers)
 
 
 assert all(not abundant(number)
            for number in range(1, 12))
 assert abundant(12)
-assert 24 not in list(non_abundant_numbers_sum(stop=25))
-assert sum(non_abundant_numbers_sum(stop=28_124)) == 4_179_871
+assert 24 not in list(non_abundant_numbers_sum(range(1, 25)))
+assert sum(non_abundant_numbers_sum(range(1, 28_124))) == 4_179_871

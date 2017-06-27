@@ -43,12 +43,9 @@ def cycled(path: Sequence[Any]) -> bool:
 
 
 def cyclical_polygonal_numbers(*,
-                               start: int,
-                               stop: int,
-                               step: int = 1,
+                               numbers: Iterable[int],
                                dimensions: Sequence[int]
                                ) -> Tuple[int, ...]:
-    numbers = range(start, stop, step)
     polygonals_filters = {dimension: partial(polygonal,
                                              dimension=dimension)
                           for dimension in dimensions}
@@ -75,13 +72,11 @@ def cyclical_polygonal_numbers(*,
 
 
 triangular_to_pentagonal_cycle = max(
-    cyclical_polygonal_numbers(start=1_000,
-                               stop=10_000,
+    cyclical_polygonal_numbers(numbers=range(1_000, 10_000),
                                dimensions=range(3, 6)),
     key=len)
 triangular_to_octagonal_cycle = max(
-    cyclical_polygonal_numbers(start=1_000,
-                               stop=10_000,
+    cyclical_polygonal_numbers(numbers=range(1_000, 10_000),
                                dimensions=range(3, 9)),
     key=len)
 

@@ -22,13 +22,6 @@ def collatz_sequence_length(start: int) -> Iterable[int]:
     return length
 
 
-def longest_collatz_sequence(*,
-                             start: int = 1,
-                             stop: int,
-                             step: int = 1) -> int:
-    return max(range(start, stop, step),
-               key=collatz_sequence_length)
-
-
 assert collatz_sequence_length(13) == 10
-assert longest_collatz_sequence(stop=1_000_000) == 837_799
+assert max(range(1, 1_000_000),
+           key=collatz_sequence_length) == 837_799

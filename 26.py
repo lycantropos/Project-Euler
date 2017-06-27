@@ -66,14 +66,9 @@ def unit_fraction_recurring_cycle_length(denominator: int) -> int:
     return len(recurring_cycle(unit_fraction(denominator)))
 
 
-def longest_recurring_cycle(*,
-                            start: int = 1,
-                            stop: int,
-                            step: int = 1) -> int:
-    return max(range(start, stop, step),
+def longest_recurring_cycle(denominators) -> int:
+    return max(denominators,
                key=unit_fraction_recurring_cycle_length)
 
 
-assert longest_recurring_cycle(start=85,
-                               stop=1_000,
-                               step=2) == 983
+assert longest_recurring_cycle(range(85, 1_000, 2)) == 983

@@ -59,23 +59,14 @@ def number_to_words(number: int) -> Iterable[str]:
             yield DIGITS_NAMES[digit]
 
 
-def numbers_to_words(*,
-                     start: int = 1,
-                     stop: int,
-                     step: int = 1,
+def numbers_to_words(numbers: Iterable[int],
+                     *,
                      sep: str = ' ') -> Iterable[str]:
-    numbers = range(start, stop, step)
-    for number in numbers:
-        yield sep.join(number_to_words(number))
+    yield from map(sep.join, map(number_to_words, numbers))
 
 
-def numbers_letters_count(*,
-                          start: int = 1,
-                          stop: int,
-                          step: int = 1) -> int:
-    return letters_count(numbers_to_words(start=start,
-                                          stop=stop,
-                                          step=step,
+def numbers_letters_count(numbers: Iterable[int]) -> int:
+    return letters_count(numbers_to_words(numbers,
                                           sep=''))
 
 
@@ -86,5 +77,5 @@ def letters_count(words: Iterable[str]) -> int:
 assert letters_count(number_to_words(342)) == 23
 assert letters_count(number_to_words(115)) == 20
 
-assert numbers_letters_count(stop=6) == 19
-assert numbers_letters_count(stop=1_001) == 21_124
+assert numbers_letters_count(range(1, 6)) == 19
+assert numbers_letters_count(range(1, 1_001)) == 21_124
