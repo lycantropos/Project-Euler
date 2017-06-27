@@ -1,13 +1,19 @@
 import operator
 import re
+from decimal import (Decimal,
+                     Context,
+                     setcontext)
 from functools import (partial,
                        reduce)
 from itertools import (chain,
-                       permutations)
+                       permutations,
+                       count,
+                       islice)
 from math import (sqrt,
                   factorial)
 from numbers import Real
 from typing import (Any,
+                    Optional,
                     Callable,
                     Hashable,
                     Iterable,
@@ -65,6 +71,7 @@ FIRST_LETTERS_FOLLOWERS = {
 memoized_primes = {1: False,
                    2: True}
 memoized_spiral_corners = dict()
+memoized_sqrt_continued_fractions_periods = dict()
 
 multiply = partial(reduce, operator.mul)
 
@@ -123,6 +130,21 @@ def bisect(sequence: Sequence[Any]) -> Tuple[Sequence[Any],
                                              Sequence[Any]]:
     middle = len(sequence) // 2
     return sequence[:middle], sequence[middle:]
+
+
+def find_cycle(sequence: Sequence[Any]) -> Optional[Sequence[Any]]:
+    elements_count = len(sequence)
+    for cycle_stop in range(1, elements_count):
+        cycle = sequence[:cycle_stop]
+        candidates = (sequence[offset: offset + cycle_stop]
+                      for offset in reversed(range(cycle_stop,
+                                                   elements_count,
+                                                   cycle_stop)))
+        last_candidate = next(candidates)
+        if (cycle[:len(last_candidate)] == last_candidate and
+                all(candidate == cycle
+                    for candidate in candidates)):
+            return cycle
 
 
 def parse_lines(lines: Iterable[str],
@@ -380,3 +402,49 @@ def words(text: str) -> Iterable[str]:
     yield from filter(str.isalpha,
                       (word.group(0)
                        for word in WORDS_RE.finditer(text)))
+
+
+def sqrt_continued_fraction(number: int) -> Iterable[int]:
+    memoized_b_coefficients = {0: Decimal(number).sqrt()}
+
+    def b_coefficient(index: int) -> Decimal:
+        try:
+            return memoized_b_coefficients[index]
+        except KeyError:
+            b_prev = b_coefficient(index - 1)
+            a_prev = int(b_prev)
+            numerator = b_prev + a_prev
+            denominator = numerator * (b_prev - a_prev)
+            coefficient = numerator / denominator
+            memoized_b_coefficients[index] = coefficient
+            return coefficient
+
+    for index in count():
+        yield int(b_coefficient(index))
+
+
+def sqrt_continued_fraction_period(number: int,
+                                   *,
+                                   members_count_start: int = 250,
+                                   members_count_step: int = 50,
+                                   precision_start: int = 500,
+                                   precision_step: int = 250,
+                                   precision_stop: int = 2_501
+                                   ) -> Sequence[int]:
+    try:
+        return memoized_sqrt_continued_fractions_periods[number]
+    except KeyError:
+        for members_count in count(members_count_start,
+                                   members_count_step):
+            for precision in range(precision_start,
+                                   precision_stop,
+                                   precision_step):
+                context = Context(prec=precision)
+                setcontext(context)
+                sequence = list(islice(sqrt_continued_fraction(number),
+                                       1,
+                                       members_count))
+                cycle = find_cycle(sequence)
+                if cycle is not None:
+                    memoized_sqrt_continued_fractions_periods[number] = cycle
+                    return cycle
