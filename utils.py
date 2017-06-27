@@ -3,10 +3,12 @@ import re
 from decimal import (Decimal,
                      Context,
                      setcontext)
+from fractions import Fraction
 from functools import (partial,
                        reduce)
 from itertools import (chain,
                        permutations,
+                       repeat,
                        count,
                        islice)
 from math import (sqrt,
@@ -448,3 +450,30 @@ def sqrt_continued_fraction_period(number: int,
                 if cycle is not None:
                     memoized_sqrt_continued_fractions_periods[number] = cycle
                     return cycle
+
+
+def sqrt_convergent(number: int,
+                    index: int,
+                    *,
+                    members_count_start: int = 250,
+                    members_count_step: int = 50,
+                    precision_start: int = 500,
+                    precision_step: int = 250,
+                    precision_stop: int = 2_501
+                    ):
+    period = sqrt_continued_fraction_period(
+        number,
+        members_count_start=members_count_start,
+        members_count_step=members_count_step,
+        precision_start=precision_start,
+        precision_step=precision_step,
+        precision_stop=precision_stop)
+    first_coefficient = Fraction(int_sqrt(number))
+    coefficients = list(islice(chain.from_iterable(repeat(period)), index))
+    try:
+        increment = coefficients.pop()
+    except IndexError:
+        return first_coefficient
+    for coefficient in reversed(coefficients):
+        increment = coefficient + Fraction(1, increment)
+    return first_coefficient + Fraction(1, increment)
