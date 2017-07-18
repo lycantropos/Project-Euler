@@ -12,6 +12,16 @@ LINE_LENGTH = 3
 MagicNGonRingType = List[Tuple[int, int, int]]
 
 
+def ring_to_string(ring: MagicNGonRingType) -> str:
+    return ''.join(map(str, chain(*ring)))
+
+
+def has_n_elements(sequence: Sequence[Any],
+                   *,
+                   n: int) -> bool:
+    return len(sequence) == n
+
+
 def magic_n_gon_rings(numbers: Iterable[int],
                       *,
                       n: int) -> Iterable[MagicNGonRingType]:
@@ -41,16 +51,6 @@ def magic_n_gon_rings(numbers: Iterable[int],
                     continue
                 ring.append(last_line)
                 yield ring
-
-
-def ring_to_string(ring: MagicNGonRingType) -> str:
-    return ''.join(map(str, chain(*ring)))
-
-
-def has_n_elements(sequence: Sequence[Any],
-                   *,
-                   n: int) -> bool:
-    return len(sequence) == n
 
 
 # reversing numbers order gives us maximum on the first entry
