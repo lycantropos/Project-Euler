@@ -185,12 +185,10 @@ def digits_to_number(digits: Iterable[int]) -> int:
 def factors(number: int,
             *,
             start: int = 1) -> Set[int]:
-    return set(
-        chain([1],
-              chain.from_iterable(
-                  (factor, number // factor)
-                  for factor in range(start, max_factor(number) + 1)
-                  if number % factor == 0)))
+    candidates = range(start, max_factor(number) + 1)
+    return {1} | set(chain.from_iterable((candidate, number // candidate)
+                                         for candidate in candidates
+                                         if number % candidate == 0))
 
 
 proper_divisors = partial(factors,
@@ -274,7 +272,9 @@ def prime(number: int) -> bool:
         return memoized_primes[number]
     except KeyError:
         if not odd(number):
-            return False
+            result = False
+            memoized_primes[number] = result
+            return result
         odd_factors = range(3, max_factor(number) + 1, 2)
         for factor in odd_factors:
             if number % factor == 0:
