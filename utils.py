@@ -182,6 +182,19 @@ def digits_to_number(digits: Iterable[int]) -> int:
     return int(''.join(map(str, digits)))
 
 
+def phi(number: int) -> Fraction:
+    return number / n_phi(number)
+
+
+def n_phi(number: int) -> Fraction:
+    # based on
+    # https://en.wikipedia.org/wiki/Euler%27s_totient_function#Euler.27s_product_formula
+    numerators, denominators = zip(*((factor, factor - 1)
+                                     for factor in prime_factors(number)))
+    return Fraction(multiply(numerators),
+                    multiply(denominators))
+
+
 def factors(number: int,
             *,
             start: int = 1) -> Set[int]:
@@ -189,6 +202,15 @@ def factors(number: int,
     return {1} | set(chain.from_iterable((candidate, number // candidate)
                                          for candidate in candidates
                                          if number % candidate == 0))
+
+
+def prime_factors(number: int) -> Set[int]:
+    candidates = prime_numbers(max_factor(number) + 1)
+    yield from chain.from_iterable((candidate, number // candidate)
+                                   for candidate in candidates
+                                   if number % candidate == 0)
+    if prime(number):
+        yield number
 
 
 proper_divisors = partial(factors,
@@ -208,14 +230,16 @@ def prime_numbers(stop: int,
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
     # TODO: refactor this mess
-    if not reverse:
-        yield 2
-        yield 3
+    initial_primes = [2, 3]
+    initial_primes = filter(partial(operator.gt, stop),
+                            initial_primes)
+    if reverse:
+        initial_primes = reversed(list(initial_primes))
+    else:
+        yield from initial_primes
 
     if stop < 5:
-        if reverse:
-            yield 3
-            yield 2
+        yield from initial_primes
         return
 
     stop_mod_six = stop % 6
@@ -235,9 +259,7 @@ def prime_numbers(stop: int,
                 for index in indices
                 if sieve[index])
 
-    if reverse:
-        yield 3
-        yield 2
+    yield from initial_primes
 
 
 def primes_sieve(stop: int) -> List[bool]:
@@ -275,9 +297,9 @@ def prime(number: int) -> bool:
             result = False
             memoized_primes[number] = result
             return result
-        odd_factors = range(3, max_factor(number) + 1, 2)
-        for factor in odd_factors:
-            if number % factor == 0:
+        factors_candidates = prime_numbers(max_factor(number) + 1)
+        for candidate in factors_candidates:
+            if number % candidate == 0:
                 result = False
                 break
         else:

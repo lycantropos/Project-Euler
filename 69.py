@@ -1,19 +1,4 @@
-from fractions import Fraction
-
-from utils import (prime,
-                   factors,
-                   multiply)
-
-
-def n_phi(number: int) -> Fraction:
-    # based on
-    # https://en.wikipedia.org/wiki/Euler%27s_totient_function#Euler.27s_product_formula
-    prime_factors = filter(prime, factors(number))
-    numerators, denominators = zip(*((factor, factor - 1)
-                                     for factor in prime_factors))
-    return Fraction(multiply(numerators),
-                    multiply(denominators))
-
+from utils import n_phi
 
 example_totient_maximum_argument = max(range(2, 11),
                                        key=n_phi)
