@@ -12,7 +12,7 @@ from itertools import (chain,
                        count,
                        islice)
 from math import (sqrt,
-                  factorial)
+                  factorial, gcd)
 from numbers import Real
 from typing import (Any,
                     Optional,
@@ -70,8 +70,9 @@ FIRST_LETTERS_FOLLOWERS = {
     'y': {'a', 'e', 'i', 'o', 'u'},
     'z': {'a', 'e', 'i', 'o', 'y'}}
 
-memoized_primes = {1: False,
-                   2: True}
+memoized_primeness = {1: False,
+                      2: True}
+memoized_prime_numbers = [2, 3, 5]
 memoized_spiral_corners = dict()
 memoized_sqrt_continued_fractions_periods = dict()
 
@@ -158,10 +159,6 @@ def parse_lines(lines: Iterable[str],
                     for word in line.split(sep))
 
 
-def max_factor(number: int) -> int:
-    return int(sqrt(number))
-
-
 def max_number(digits_count: int) -> int:
     return 10 ** digits_count - 1
 
@@ -187,10 +184,12 @@ def phi(number: int) -> Fraction:
 
 
 def n_phi(number: int) -> Fraction:
+    print(number)
     # based on
     # https://en.wikipedia.org/wiki/Euler%27s_totient_function#Euler.27s_product_formula
+    prime_factors = filter(prime, factors(number))
     numerators, denominators = zip(*((factor, factor - 1)
-                                     for factor in prime_factors(number)))
+                                     for factor in prime_factors))
     return Fraction(multiply(numerators),
                     multiply(denominators))
 
@@ -198,19 +197,10 @@ def n_phi(number: int) -> Fraction:
 def factors(number: int,
             *,
             start: int = 1) -> Set[int]:
-    candidates = range(start, max_factor(number) + 1)
+    candidates = range(start, int_sqrt(number) + 1)
     return {1} | set(chain.from_iterable((candidate, number // candidate)
                                          for candidate in candidates
                                          if number % candidate == 0))
-
-
-def prime_factors(number: int) -> Set[int]:
-    candidates = prime_numbers(max_factor(number) + 1)
-    yield from chain.from_iterable((candidate, number // candidate)
-                                   for candidate in candidates
-                                   if number % candidate == 0)
-    if prime(number):
-        yield number
 
 
 proper_divisors = partial(factors,
@@ -227,6 +217,20 @@ def fibonacci_numbers(stop: Real = float('inf')) -> Iterable[int]:
 def prime_numbers(stop: int,
                   *,
                   reverse: bool = False) -> Iterator[int]:
+    global memoized_prime_numbers
+    max_memoized_prime_number = memoized_prime_numbers[-1]
+    if stop < max_memoized_prime_number:
+        stop_indices = (
+            len(memoized_prime_numbers) - index
+            for (index,
+                 prime_number) in enumerate(reversed(memoized_prime_numbers))
+            if prime_number < stop)
+        stop_index = next(stop_indices, 0)
+        result = memoized_prime_numbers[:stop_index]
+        if reverse:
+            result = reversed(result)
+        yield from result
+        return
     # based on
     # https://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n-in-python/3035188#3035188
     # TODO: refactor this mess
@@ -237,10 +241,6 @@ def prime_numbers(stop: int,
         initial_primes = reversed(list(initial_primes))
     else:
         yield from initial_primes
-
-    if stop < 5:
-        yield from initial_primes
-        return
 
     stop_mod_six = stop % 6
     correction = stop_mod_six > 1
@@ -255,17 +255,24 @@ def prime_numbers(stop: int,
     indices = range(1, stop // 3 - correction)
     if reverse:
         indices = reversed(indices)
-    yield from (3 * index + 1 | 1
-                for index in indices
-                if sieve[index])
-
+    prime_numbers_list = []
+    for index in indices:
+        candidate = 3 * index + 1 | 1
+        if sieve[index]:
+            prime_numbers_list.append(candidate)
+            memoized_primeness[candidate] = True
+            yield candidate
+        else:
+            memoized_primeness[candidate] = False
+    memoized_prime_numbers = sorted(set(memoized_prime_numbers
+                                        + prime_numbers_list))
     yield from initial_primes
 
 
 def primes_sieve(stop: int) -> List[bool]:
     sieve = [True] * (stop // 3)
     sieve[0] = False
-    factor_stop = max_factor(stop) // 3 + 1
+    factor_stop = int_sqrt(stop) // 3 + 1
     for factor in range(factor_stop):
         if not sieve[factor]:
             continue
@@ -285,27 +292,50 @@ def primes_sieve(stop: int) -> List[bool]:
     return sieve
 
 
-def odd(number: int) -> int:
-    return number & 1
+def reduced_proper_fractions(*,
+                             start: Fraction = Fraction(0, 1),
+                             stop: Fraction,
+                             max_denominator: int) -> Iterable[Fraction]:
+    start_numerator, start_denominator = start.numerator, start.denominator
+    stop_numerator, stop_denominator = stop.numerator, stop.denominator
+    stop_float = float(stop)
+    for denominator in range(max_denominator, 1, -1):
+        for numerator in range(int(stop_float * denominator), 0, -1):
+            if start_numerator * denominator >= start_denominator * numerator:
+                continue
+            if stop_denominator * numerator >= stop_numerator * denominator:
+                continue
+            if not relatively_prime(numerator, denominator):
+                continue
+            yield Fraction(numerator, denominator)
+            break
 
 
 def prime(number: int) -> bool:
     try:
-        return memoized_primes[number]
+        return memoized_primeness[number]
     except KeyError:
         if not odd(number):
             result = False
-            memoized_primes[number] = result
+            memoized_primeness[number] = result
             return result
-        factors_candidates = prime_numbers(max_factor(number) + 1)
+        factors_candidates = prime_numbers(int_sqrt(number) + 1)
         for candidate in factors_candidates:
             if number % candidate == 0:
                 result = False
                 break
         else:
             result = True
-        memoized_primes[number] = result
+        memoized_primeness[number] = result
         return result
+
+
+def odd(number: int) -> int:
+    return number & 1
+
+
+def relatively_prime(number: int, other_number: int) -> bool:
+    return gcd(number, other_number) == 1
 
 
 def is_palindrome(string: str) -> bool:
@@ -330,7 +360,7 @@ def pythagorean_triplets_candidates(stop: int
     min_m = 2
     max_k = stop // (min_n ** 2 + min_m ** 2)
     for k in range(1, max_k + 1):
-        numbers = range(1, max_factor(stop // k))
+        numbers = range(1, int_sqrt(stop // k))
         for n, m in map(sorted, permutations(numbers, r=2)):
             candidate = sorted([m ** 2 - n ** 2,
                                 2 * m * n,

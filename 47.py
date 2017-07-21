@@ -2,7 +2,8 @@ from itertools import count
 from typing import List
 
 from utils import (prime,
-                   factors)
+                   factors,
+                   capacity)
 
 
 def distinct_primes_factors(*,
@@ -15,9 +16,9 @@ def distinct_primes_factors(*,
         if numbers_count == consecutive_numbers_count:
             break
 
-        prime_factors = set(filter(prime, factors(number)))
+        prime_factors_count = capacity(filter(prime, factors(number)))
 
-        if len(prime_factors) != distinct_prime_factors_count:
+        if prime_factors_count != distinct_prime_factors_count:
             numbers_count = 0
             consecutive_numbers[:] = []
             continue

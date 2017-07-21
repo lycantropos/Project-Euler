@@ -15,7 +15,7 @@ def spiral_diagonal_numbers(dimension: int) -> Iterable[int]:
 def spiral_primes_ratio(dimension: int) -> float:
     diagonal_numbers = list(spiral_diagonal_numbers(dimension))
     diagonal_prime_numbers_count = capacity(filter(prime,
-                                                   diagonal_numbers))
+                                                   reversed(diagonal_numbers)))
     return diagonal_prime_numbers_count / len(diagonal_numbers)
 
 

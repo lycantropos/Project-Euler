@@ -1,8 +1,8 @@
 from utils import n_phi
 
-example_totient_maximum_argument = max(range(2, 11),
+example_totient_maximum_argument = max(range(10, 1, -1),
                                        key=n_phi)
-totient_maximum_argument = max(range(2, 1_000_001),
+totient_maximum_argument = max(range(1_000_000, 1, -1),
                                key=n_phi)
 
 assert example_totient_maximum_argument == 6

@@ -16,5 +16,5 @@ def totient_permutations(numbers: Iterable[int]) -> Iterable[int]:
             yield number
 
 
-assert min(totient_permutations(range(3, 10_000_000)),
+assert min(totient_permutations(range(10_000_000 - 1, 1, -1)),
            key=n_phi) == 8_319_823
