@@ -296,7 +296,8 @@ def primes_sieve(stop: int) -> List[bool]:
 def reduced_proper_fractions(*,
                              start: Fraction = Fraction(0, 1),
                              stop: Fraction,
-                             max_denominator: int) -> Iterable[Fraction]:
+                             max_denominator: int,
+                             only_first: bool = False) -> Iterable[Fraction]:
     start_numerator, start_denominator = start.numerator, start.denominator
     stop_numerator, stop_denominator = stop.numerator, stop.denominator
     stop_float = float(stop)
@@ -309,7 +310,8 @@ def reduced_proper_fractions(*,
             if not relatively_prime(numerator, denominator):
                 continue
             yield Fraction(numerator, denominator)
-            break
+            if only_first:
+                break
 
 
 def prime(number: int) -> bool:
