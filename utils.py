@@ -12,7 +12,8 @@ from itertools import (chain,
                        count,
                        islice)
 from math import (sqrt,
-                  factorial, gcd)
+                  factorial,
+                  gcd)
 from numbers import Real
 from typing import (Any,
                     Optional,
