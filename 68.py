@@ -56,8 +56,8 @@ magic_5_gon_rings = magic_n_gon_rings(range(10, 0, -1),
                                       n=5)
 magic_5_gon_rings_strings = map(ring_to_string,
                                 magic_5_gon_rings)
+has_sixteen_elements = partial(has_n_elements, n=16)
 
 assert next(magic_3_gon_rings_strings) == '432621513'
-assert next(filter(partial(has_n_elements,
-                           n=16),
+assert next(filter(has_sixteen_elements,
                    magic_5_gon_rings_strings)) == '6531031914842725'
