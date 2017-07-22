@@ -2,11 +2,11 @@ import operator
 from functools import partial
 from itertools import (chain,
                        permutations)
-from typing import (Any,
-                    Iterable,
-                    Sequence,
+from typing import (Iterable,
                     Tuple,
                     List)
+
+from utils import has_n_elements
 
 LINE_LENGTH = 3
 MagicNGonRingType = List[Tuple[int, int, int]]
@@ -14,12 +14,6 @@ MagicNGonRingType = List[Tuple[int, int, int]]
 
 def ring_to_string(ring: MagicNGonRingType) -> str:
     return ''.join(map(str, chain(*ring)))
-
-
-def has_n_elements(sequence: Sequence[Any],
-                   *,
-                   n: int) -> bool:
-    return len(sequence) == n
 
 
 def magic_n_gon_rings(numbers: Iterable[int],

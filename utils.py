@@ -26,7 +26,7 @@ from typing import (Any,
                     Sequence,
                     Set,
                     Tuple,
-                    List)
+                    List, Collection)
 
 SPIRAL_START = 1
 WORDS_RE = re.compile(r'\b\w+\b')
@@ -107,6 +107,12 @@ def collect_mapping(keys_values: Iterable[Tuple[Hashable, Any]],
     for key, value in keys_values:
         dictionary.setdefault(key, values_container()).append(value)
     return dictionary
+
+
+def has_n_elements(collection: Collection[Any],
+                   *,
+                   n: int) -> bool:
+    return len(collection) == n
 
 
 def chunks(sequence: Sequence[Any],
