@@ -21,12 +21,13 @@ from typing import (Any,
                     Hashable,
                     Iterable,
                     Iterator,
+                    Collection,
+                    Sequence,
                     MutableMapping,
                     MutableSequence,
-                    Sequence,
                     Set,
                     Tuple,
-                    List, Collection)
+                    List)
 
 SPIRAL_START = 1
 WORDS_RE = re.compile(r'\b\w+\b')
@@ -91,10 +92,10 @@ def star_filter(function: Callable[..., bool],
                 if function(*element))
 
 
-def map_tuples(elements: Iterable[int],
+def map_tuples(elements: Iterable[Any],
                *,
                function: Callable[[Any], Any]
-               ) -> Iterable[Tuple[int, int]]:
+               ) -> Iterable[Tuple[Any, Any]]:
     for number in elements:
         yield function(number), number
 
@@ -351,6 +352,15 @@ def is_palindrome(string: str) -> bool:
     return string == string[::-1]
 
 
+def integer_right_triangles(max_perimeter: int
+                            ) -> Iterable[Tuple[int, int, int]]:
+    def is_perimeter_valid(triplet: Tuple[int, int, int]) -> bool:
+        return sum(triplet) <= max_perimeter
+
+    yield from filter(is_perimeter_valid,
+                      pythagorean_triplets(max_perimeter))
+
+
 def pythagorean_triplets(stop: int) -> Iterable[int]:
     yield from set(filter(is_pythagorean_triplet,
                           pythagorean_triplets_candidates(stop)))
@@ -370,7 +380,8 @@ def pythagorean_triplets_candidates(stop: int
     max_k = stop // (min_n ** 2 + min_m ** 2)
     for k in range(1, max_k + 1):
         numbers = range(1, int_sqrt(stop // k))
-        for n, m in map(sorted, permutations(numbers, r=2)):
+        for n, m in map(sorted, permutations(numbers,
+                                             r=2)):
             candidate = sorted([m ** 2 - n ** 2,
                                 2 * m * n,
                                 m ** 2 + n ** 2])
