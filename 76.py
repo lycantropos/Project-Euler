@@ -1,8 +1,15 @@
 from utils import factors
 
+memoized_sum_of_factors = {}
 
-def sum_of_divisors(number: int) -> int:
-    return sum(factors(number))
+
+def sum_of_factors(number: int) -> int:
+    try:
+        return memoized_sum_of_factors[number]
+    except KeyError:
+        result = sum(factors(number))
+        memoized_sum_of_factors[number] = result
+        return result
 
 
 memoized_partitions = {0: 1}
@@ -14,7 +21,8 @@ def partitions(number: int) -> int:
     except KeyError:
         # based on
         # https://en.wikipedia.org/wiki/Partition_(number_theory)#Other_recurrence_relations
-        result = sum(sum_of_divisors(number - offset) * partitions(offset)
+        result = sum(sum_of_factors(number - offset)
+                     * partitions(offset)
                      for offset in range(number)) // number
         memoized_partitions[number] = result
         return result
