@@ -72,6 +72,8 @@ FIRST_LETTERS_FOLLOWERS = {
     'y': {'a', 'e', 'i', 'o', 'u'},
     'z': {'a', 'e', 'i', 'o', 'y'}}
 
+memoized_partitions = {0: 1}
+memoized_sum_of_factors = dict()
 memoized_primeness = {1: False,
                       2: True}
 memoized_prime_numbers = [2, 3, 5]
@@ -200,6 +202,28 @@ def n_phi(number: int) -> Fraction:
                                      for factor in prime_factors))
     return Fraction(multiply(numerators),
                     multiply(denominators))
+
+
+def sum_of_factors(number: int) -> int:
+    try:
+        return memoized_sum_of_factors[number]
+    except KeyError:
+        result = sum(factors(number))
+        memoized_sum_of_factors[number] = result
+        return result
+
+
+def partitions(number: int) -> int:
+    try:
+        return memoized_partitions[number]
+    except KeyError:
+        # based on
+        # https://en.wikipedia.org/wiki/Partition_(number_theory)#Other_recurrence_relations
+        result = sum(sum_of_factors(number - offset)
+                     * partitions(offset)
+                     for offset in range(number)) // number
+        memoized_partitions[number] = result
+        return result
 
 
 def factors(number: int,
