@@ -3,7 +3,7 @@ from itertools import count
 from utils import (factors,
                    prime)
 
-memoized_sum_of_prime_factors = {}
+memoized_sum_of_prime_factors = dict()
 
 
 def sum_of_prime_factors(number: int) -> int:
