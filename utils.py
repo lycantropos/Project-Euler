@@ -575,13 +575,21 @@ def sqrt_convergent(number: int,
     return first_coefficient + Fraction(1, increment)
 
 
-def maximum_path_sum(*,
-                     rows: Iterable[Iterable[int]],
-                     successors_count: int) -> int:
+def aggregated_path_sum(*,
+                        rows: Iterable[Iterable[int]],
+                        successors_count: int,
+                        function: Callable[[Iterable[int]], int]) -> int:
     rows_reversed = reversed(rows)
     next_row = next(rows_reversed)
     for row in rows_reversed:
-        next_row = tuple(number + max(next_row[index:index + successors_count])
+        next_row = tuple(number
+                         + function(next_row[index:index + successors_count])
                          for index, number in enumerate(row))
     result, = next_row
     return result
+
+
+maximum_path_sum = partial(aggregated_path_sum,
+                           function=max)
+minimum_path_sum = partial(aggregated_path_sum,
+                           function=min)
